@@ -2,67 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website Title</title>
+    <title>2D Pixel Game Website</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
-        nav {
-            margin: 10px 0;
-            text-align: center;
+        #game {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background-color: #87ceeb; /* Light sky background */
+            border: 2px solid #333;
         }
-        nav a {
-            color: #333;
-            margin: 0 15px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        section {
-            padding: 20px;
-            text-align: center;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+        #player {
             position: absolute;
-            width: 100%;
-            bottom: 0;
+            width: 32px;
+            height: 32px;
+            background-color: red; /* Player is a red square for now */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .portal {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: yellow;
+        }
+        #portal1 {
+            top: 50px;
+            left: 50px;
+        }
+        #portal2 {
+            bottom: 50px;
+            right: 50px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Welcome to Your Website</h1>
-    </header>
+    <div id="game">
+        <div id="player"></div>
+        <div id="portal1" class="portal" data-url="page1.html"></div>
+        <div id="portal2" class="portal" data-url="page2.html"></div>
+    </div>
 
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </nav>
+    <script>
+        // Player movement logic
+        const player = document.getElementById('player');
+        const game = document.getElementById('game');
+        const playerSpeed = 10; // Speed in pixels
 
-    <section>
-        <h2>About Us</h2>
-        <p>This is a simple webpage template. Customize this section with your content.</p>
-    </section>
+        let playerX = game.clientWidth / 2 - player.clientWidth / 2;
+        let playerY = game.clientHeight / 2 - player.clientHeight / 2;
 
-    <footer>
-        <p>&copy; 2024 Your Website</p>
-    </footer>
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    if (playerY > 0) playerY -= playerSpeed;
+                    break;
+                case 'ArrowDown':
+                    if (playerY < game.clientHeight - player.clientHeight) playerY += playerSpeed;
+                    break;
+                case 'ArrowLeft':
+                    if (playerX > 0) playerX -= playerSpeed;
+                    break;
+                case 'ArrowRight':
+                    if (playerX < game.clientWidth - player.clientWidth) playerX += playerSpeed;
+                    break;
+            }
+            player.style.top = playerY + 'px';
+            player.style.left = playerX + 'px';
+            checkPortals();
+        });
+
+        // Check if player has moved onto a portal
+        function checkPortals() {
+            const portals = document.querySelectorAll('.portal');
+            portals.forEach(portal => {
+                const portalRect = portal.getBoundingClientRect();
+                const playerRect = player.getBoundingClientRect();
+
+                if (
+                    playerRect.left < portalRect.right &&
+                    playerRect.right > portalRect.left &&
+                    playerRect.top < portalRect.bottom &&
+                    playerRect.bottom > portalRect.top
+                ) {
+                    window.location.href = portal.dataset.url; // Navigate to the next page
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

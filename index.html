@@ -14,20 +14,21 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            overflow: hidden;
         }
         #game {
             position: relative;
-            width: 500px;
-            height: 500px;
-            background-color: #87ceeb; /* Light sky background */
-            border: 2px solid #333;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-image: linear-gradient(45deg, maroon 25%, navy 25%, navy 50%, maroon 50%, maroon 75%, navy 75%, navy);
+            background-size: 64px 64px;
         }
         #player {
             position: absolute;
             width: 32px;
             height: 32px;
-            background-color: transparent; /* Player is a red square for now */
+            background-color: transparent; 
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -43,14 +44,13 @@
             background-size: cover;
         }
         #portal1 {
-            top: 50px;
-            left: 50px;
+            top: 100px;
+            left: 100px;
         }
         #portal2 {
-            bottom: 50px;
-            right: 50px;
+            bottom: 100px;
+            right: 100px;
         }
-
     </style>
 </head>
 <body>
@@ -62,35 +62,41 @@
     </div>
 
     <script>
-        // Player movement logic
+        // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');
-        const playerSpeed = 10; // Speed in pixels
+        const playerSpeed = 2; // Lower speed for smooth movement
 
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
+        let keysPressed = {};
 
+        // Track key presses
         document.addEventListener('keydown', function (event) {
-            switch (event.key) {
-                case 'ArrowUp':
-                    if (playerY > 0) playerY -= playerSpeed;
-                    break;
-                case 'ArrowDown':
-                    if (playerY < game.clientHeight - player.clientHeight) playerY += playerSpeed;
-                    break;
-                case 'ArrowLeft':
-                    if (playerX > 0) playerX -= playerSpeed;
-                    break;
-                case 'ArrowRight':
-                    if (playerX < game.clientWidth - player.clientWidth) playerX += playerSpeed;
-                    break;
-            }
-            player.style.top = playerY + 'px';
-            player.style.left = playerX + 'px';
-            checkPortals();
+            keysPressed[event.key] = true;
         });
 
-        // Check if player has moved onto a portal
+        document.addEventListener('keyup', function (event) {
+            keysPressed[event.key] = false;
+        });
+
+        function movePlayer() {
+            if (keysPressed['ArrowUp']) playerY -= playerSpeed;
+            if (keysPressed['ArrowDown']) playerY += playerSpeed;
+            if (keysPressed['ArrowLeft']) playerX -= playerSpeed;
+            if (keysPressed['ArrowRight']) playerX += playerSpeed;
+
+            // Update player position
+            player.style.top = playerY + 'px';
+            player.style.left = playerX + 'px';
+
+            // Update the background to scroll with the player
+            game.style.backgroundPositionX = `${-playerX / 2}px`;
+            game.style.backgroundPositionY = `${-playerY / 2}px`;
+
+            checkPortals();
+        }
+
         function checkPortals() {
             const portals = document.querySelectorAll('.portal');
             portals.forEach(portal => {
@@ -107,6 +113,15 @@
                 }
             });
         }
+
+        // Continuously move the player and update the game
+        function gameLoop() {
+            movePlayer();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        gameLoop();
     </script>
 
 </body>

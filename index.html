@@ -21,7 +21,7 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background-image: navy;
+            background-color: navy;
             background-size: 64px 64px;
         }
         #player {
@@ -51,16 +51,31 @@
             top: 100px;
             right: 100px;
             transform: translate(-50%, -50%);
-            background-image: url('pj_as_sprite.png');
+            background-image: url('toolbox.png');
+            background-size: cover;
+        }
+        #chest {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: transparent; 
+            bottom: 100px;
+            left: 100px;
+            transform: translate(-50%, -50%);
+            background-image: url('chest.png');
             background-size: cover;
         }
         #portal1 {
             top: 100px;
-            left: 0px;
         }
         #portal2 {
             bottom: 100px;
-            right: 0px;
+        }
+        #portal3{
+            right: 100px;
+        }
+        #portal4{
+            left: 100px;
         }
     </style>
 </head>
@@ -70,7 +85,10 @@
         <div id="player"></div>
         <div id="portal1" class="portal" data-url="page1.html"></div>
         <div id="portal2" class="portal" data-url="page2.html"></div>
+        <div id="portal3" class="portal" data-url="page3.html"></div>
+        <div id="portal4" class="portal" data-url="page4.html"></div>
         <div id="toolbox" data-url="#toolbox"></div>
+        <div id="chest" data-url="#chest"></div>
     </div>
 
     <script>

@@ -21,7 +21,7 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background-image: linear-gradient(45deg, maroon 25%, navy 25%, navy 50%, maroon 50%, maroon 75%, navy 75%, navy);
+            background-image: navy;
             background-size: 64px 64px;
         }
         #player {
@@ -43,13 +43,24 @@
             background-image: url('portal.gif');
             background-size: cover;
         }
+        #toolbox {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: transparent; 
+            top: 100px;
+            right: 100px;
+            transform: translate(-50%, -50%);
+            background-image: url('pj_as_sprite.png');
+            background-size: cover;
+        }
         #portal1 {
             top: 100px;
-            left: 100px;
+            left: 0px;
         }
         #portal2 {
             bottom: 100px;
-            right: 100px;
+            right: 0px;
         }
     </style>
 </head>
@@ -59,6 +70,7 @@
         <div id="player"></div>
         <div id="portal1" class="portal" data-url="page1.html"></div>
         <div id="portal2" class="portal" data-url="page2.html"></div>
+        <div id="toolbox" data-url="#toolbox"></div>
     </div>
 
     <script>

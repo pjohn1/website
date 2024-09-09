@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2D Pixel Game Website</title>
+    <title>Phillip Johnson Profile</title>
     <style>
         * {
             margin: 0;
@@ -21,13 +21,13 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background-color: navy;
+            background-color: burlywood;
             background-size: 64px 64px;
         }
         #player {
             position: absolute;
-            width: 32px;
-            height: 32px;
+            width: 50px;
+            height: 50px;
             background-color: transparent; 
             top: 50%;
             left: 50%;
@@ -37,8 +37,8 @@
         }
         .portal {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 100px;
+            height: 100px;
             background-color: transparent;
             background-image: url('portal.gif');
             background-size: cover;
@@ -48,8 +48,8 @@
             width: 32px;
             height: 32px;
             background-color: transparent; 
-            top: 100px;
-            right: 100px;
+            top: 50%;
+            right: 50%;
             transform: translate(-50%, -50%);
             background-image: url('toolbox.png');
             background-size: cover;
@@ -59,23 +59,23 @@
             width: 32px;
             height: 32px;
             background-color: transparent; 
-            bottom: 100px;
-            left: 100px;
+            bottom: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
             background-image: url('chest.png');
             background-size: cover;
         }
         #portal1 {
-            top: 100px;
+            top: 50%;
         }
         #portal2 {
-            bottom: 100px;
+            bottom: 50%;
         }
         #portal3{
-            right: 100px;
+            right: 50%;
         }
         #portal4{
-            left: 100px;
+            left: 50%;
         }
     </style>
 </head>

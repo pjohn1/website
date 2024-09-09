@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Redirect Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* The container for the game area */
+        #street-scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('internship_background.jpg'); /* Street background */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Centering the player sprite in the middle of the street */
+        #player {
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            background-image: url('pj_as_sprite.png'); /* Your sprite image */
+            background-size: cover;
+            background-position: center;
+            top: 50%;  /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Correct centering */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="street-scene">
+        <!-- Sprite positioned at the middle of the street -->
+        <div id="player"></div>
+    </div>
+
+    <script>
+        // You can add any additional game logic or movement here if needed
+    </script>
+
+</body>
+</html>

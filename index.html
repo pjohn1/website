@@ -27,16 +27,20 @@
             position: absolute;
             width: 32px;
             height: 32px;
-            background-color: red; /* Player is a red square for now */
+            background-color: transparent; /* Player is a red square for now */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            background-image: url('pj_as_sprite.png');
+            background-size: cover;
         }
         .portal {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-color: yellow;
+            background-color: transparent;
+            background-image: url('portal.gif');
+            background-size: cover;
         }
         #portal1 {
             top: 50px;
@@ -45,10 +49,6 @@
         #portal2 {
             bottom: 50px;
             right: 50px;
-        }
-        #player {
-            background-image: url('pj_as_sprite.png');
-            background-size: cover;
         }
 
     </style>

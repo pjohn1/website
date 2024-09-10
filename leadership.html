@@ -14,24 +14,36 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
+            background-image: url('leadership_back.png');
+            background-size: contain;
+            background-repeat: repeat;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
         }
         #game {
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background-color: burlywood;
-            background-size: 64px 64px;
+            background-image: url('leadership_background.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: 1;
         }
         #player {
             position: absolute;
             width: 3vw;
             height: 10vh;
             background-color: transparent; 
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            bottom: 10%;
+            left: 1%;
             background-image: url('pj_as_sprite.png');
             background-size: cover;
         }
@@ -39,45 +51,11 @@
             position: absolute;
             width: 6vw;
             height: 13vh;
+            left: 0%;
+            bottom: 40%;
             background-color: transparent;
             background-image: url('portal.gif');
             background-size: cover;
-        }
-        #toolbox {
-            position: absolute;
-            width: 10vw;
-            height: 20vh;
-            background-color: transparent; 
-            top: 50px;
-            right: 25%;
-            background-image: url('toolbox.png');
-            background-size: cover;
-        }
-        #chest {
-            position: absolute;
-            width: 10vw;
-            height: 20vh;
-            background-color: transparent; 
-            bottom: 50px;
-            left: 20%;
-            background-image: url('chest.png');
-            background-size: cover;
-        }
-        #internships {
-            right: 5%;
-            top: 50%;
-        }
-        #research {
-            left: 5%;
-            top: 50%;
-        }
-        #projects{
-            top: 5%;
-            right: 50%;
-        }
-        #leadership{
-            bottom: 5%;
-            right: 50%
         }
     </style>
 </head>
@@ -85,12 +63,7 @@
 
     <div id="game">
         <div id="player"></div>
-        <div id="internships" class="portal" data-url="internships.html"></div>
-        <div id="research" class="portal" data-url="research.html"></div>
-        <div id="projects" class="portal" data-url="projects.html"></div>
-        <div id="leadership" class="portal" data-url="leadership.html"></div>
-        <div id="toolbox" data-url="#toolbox"></div>
-        <div id="chest" data-url="#chest"></div>
+        <div id="portal" class="portal" data-url="index.html"></div>
     </div>
 
     <script>
@@ -122,28 +95,22 @@
             player.style.top = playerY + 'px';
             player.style.left = playerX + 'px';
 
-            // Update the background to scroll with the player
-            game.style.backgroundPositionX = `${-playerX / 2}px`;
-            game.style.backgroundPositionY = `${-playerY / 2}px`;
-
             checkPortals();
         }
 
         function checkPortals() {
-            const portals = document.querySelectorAll('.portal');
-            portals.forEach(portal => {
-                const portalRect = portal.getBoundingClientRect();
-                const playerRect = player.getBoundingClientRect();
+            const portals = document.querySelector('.portal');
+            const portalRect = portal.getBoundingClientRect();
+            const playerRect = player.getBoundingClientRect();
 
-                if (
-                    playerRect.left < portalRect.right &&
-                    playerRect.right > portalRect.left &&
-                    playerRect.top < portalRect.bottom &&
-                    playerRect.bottom > portalRect.top
-                ) {
-                    window.location.href = portal.dataset.url; // Navigate to the next page
-                }
-            });
+            if (
+                playerRect.left < portalRect.right &&
+                playerRect.right > portalRect.left &&
+                playerRect.top < portalRect.bottom &&
+                playerRect.bottom > portalRect.top
+            ) {
+                window.location.href = portal.dataset.url; // Navigate to the next page
+            }
         }
 
         // Continuously move the player and update the game

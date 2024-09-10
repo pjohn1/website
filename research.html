@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Platformer with Ground</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        #game {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: #87CEEB;
+        }
+
+        #sprite {
+            position: absolute;
+            width: 3vw;
+            height: 10vh;
+            background-color: transparent;
+            background-image: url('pj_as_sprite.png');
+            background-size: cover;
+            bottom: 10%;
+            left: 1vw;
+        }
+        .info {
+            position: absolute;
+            width: 30vw;
+            height: 90vh;
+            left: 73vw;
+            bottom: 10vh;
+            background-color: black;
+            visibility: hidden;
+            z-index: 1;
+        }
+
+        .platform {
+            position: absolute;
+            width: 12vw;
+            height: 3vw;
+            background-image: url('platform.png');
+            background-size: cover;
+        }
+        .portal {
+            position: absolute;
+            width: 6vw;
+            height: 13vh;
+            bottom: 10vh;
+            left: 80vw;
+            background-image: url('portal.gif'); /* Replace with portal image */
+            background-size: cover;
+            z-index: 0;
+        }
+
+        #ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background-color: brown;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="sprite"></div>
+        <div class="platform" style="top: 70%; left: 20%;"></div>
+        <div class="platform" style="top: 50%; left: 40%;"></div>
+        <div class="platform" style="top: 30%; left: 60%;"></div>
+        <div class="info" id="info1"></div>
+        <div class="info" id="info2"></div>
+        <div class="info" id="info3"></div>
+        <div id="portal" class="portal" data-url="index.html"></div> <!-- Redirect to index.html -->
+        <div id="ground"></div> <!-- This is the ground -->
+    </div>
+
+    <script>
+        const sprite = document.getElementById('sprite');
+        const ground = document.getElementById('ground');
+        const portal = document.getElementById('portal');
+        let spriteY = parseInt(window.getComputedStyle(sprite).getPropertyValue('bottom'));
+        let spriteX = parseInt(window.getComputedStyle(sprite).getPropertyValue('left'));
+        let gravity = 0;
+        let jumpHeight = 10;
+        let isJumping = false;
+        let speed = 3; // Smoother and faster movement
+        let isMovingLeft = false;
+        let isMovingRight = false;
+        let platforms = document.querySelectorAll('.platform'); // Including the ground
+        let infos = document.querySelectorAll('.info');
+        let onPlatform = false;
+        let platformOn = -1;
+        let platform = false;
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' && !isJumping) {
+                jump();
+            }
+
+            if (event.code === 'KeyA') {
+                isMovingLeft = true;
+            }
+
+            if (event.code === 'KeyD') {
+                isMovingRight = true;
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.code === 'KeyA') {
+                isMovingLeft = false;
+            }
+
+            if (event.code === 'KeyD') {
+                isMovingRight = false;
+            }
+        });
+
+        function jump() {
+            isJumping = true;
+            let jumpCount = 0;
+            let jumpInterval = setInterval(() => {
+                if (jumpCount < 20) {
+                    spriteY += jumpHeight;
+                    sprite.style.bottom = spriteY + 'px';
+                    jumpCount++;
+                } else {
+                    clearInterval(jumpInterval);
+                    fall();
+                }
+            }, 20);
+        }
+
+        function fall() {
+            let fallInterval = setInterval(() => {
+                onPlatform = checkIfOnPlatform();
+                console.log(onPlatform)
+                if (!onPlatform) {
+                    spriteY -= gravity;
+                    sprite.style.bottom = spriteY + 'px';
+                    gravity += 0.5; // Faster fall
+                    bottom = ground.getBoundingClientRect().height
+                    if (spriteY <= bottom) { // Ground level
+                        spriteY = bottom;
+                        gravity = 0;
+                        clearInterval(fallInterval);
+                        isJumping = false;
+                    }
+                } else {
+                    gravity = 0;
+                    clearInterval(fallInterval);
+                    isJumping = false;
+                }
+            }, 20);
+        }
+
+        function moveLeft() {
+            if (spriteX > 0) {
+                spriteX -= speed;
+                sprite.style.left = spriteX + 'px';
+            }
+        }
+
+        function moveRight() {
+            if (spriteX < window.innerWidth - 40) { // Adjusted for sprite width
+                spriteX += speed;
+                sprite.style.left = spriteX + 'px';
+            }
+        }
+
+        function inBound( spriteRect, platformRect )
+        {
+            if (
+                    spriteRect.bottom >= platformRect.top - 5&&
+                    spriteRect.bottom <= platformRect.top + 5&&
+                    spriteRect.left + spriteRect.width > platformRect.left &&
+                    spriteRect.left < platformRect.left + platformRect.width
+                ) 
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        function checkIfOnPlatform() {
+
+            for (let i = 0; i < platforms.length; i++) {
+                let platform = platforms[i];
+                let platformRect = platform.getBoundingClientRect();
+                let spriteRect = sprite.getBoundingClientRect();
+
+                if ( inBound(spriteRect,platformRect) )
+                {
+                    spriteY = window.innerHeight - platformRect.top;
+                    infos[i].style.visibility='visible';
+                    return true;
+                }
+            }
+
+            spriteRect = sprite.getBoundingClientRect();
+            let groundRect = ground.getBoundingClientRect();
+
+            if ( inBound(spriteRect,groundRect))
+            {
+                spriteY = window.innerHeight - groundRect.top;
+                return true;
+            }
+
+            else
+            {
+                for (let i = 0;i<infos.length;i++)
+                {
+                    infos[i].style.visibility='hidden';
+                }
+                return false;
+            }
+
+        }
+
+        function checkPortal() {
+            let spriteRect = sprite.getBoundingClientRect();
+            let portalRect = portal.getBoundingClientRect();
+            if (
+                    spriteRect.left < portalRect.right &&
+                    spriteRect.right > portalRect.left &&
+                    spriteRect.top < portalRect.bottom &&
+                    spriteRect.bottom > portalRect.top
+                ) {
+                    window.location.href = portal.dataset.url; // Navigate to the next page
+                }
+        }
+
+        function gameLoop() {
+            
+            checkPortal();
+            platform = checkIfOnPlatform();
+            if (isMovingLeft) {
+                moveLeft();
+            }
+            if (isMovingRight) {
+                moveRight();
+            }
+            // Ensure the sprite falls if not on any platform
+            if (!isJumping && !platform) {
+                fall();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop(); // Start the game loop for smooth movement
+    </script>
+</body>
+</html>

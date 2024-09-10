@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phillip Johnson Profile</title>
+    <style>
+        /* Full-page background with no whitespace */
+        /* Ensure the body and html take up the full viewport height */
+        html, body {
+            height: 100vh;            /* Ensure full height of the viewport */
+            width: 100vw;             /* Ensure full width of the viewport */
+            overflow: hidden;        /* Disable scrolling */
+            margin: 0;
+            padding: 0;
+            background-image: url('projects_background.png'); /* Replace with your background image */
+            background-size: contain;  /* Make the background cover the entire viewport */
+            background-position: center; /* Center the background image */
+            /* background-repeat: no-repeat; */
+        }
+
+        .image {
+            position:absolute;
+            width: 50vw;
+            height: 50vh;
+            background-color: transparent;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer; /* Show that this is clickable */
+        }
+
+        .portal {
+            position: absolute;
+            width: 10vw;
+            height: 20vh;
+            bottom: 40vh;
+            left: 52vw;
+            background-color: transparent;
+            background-image: url('portal.gif'); /* Replace with portal image */
+            background-size: cover;
+            background-position: center;
+            cursor: pointer; /* Show that this is clickable */
+        }
+
+        #rc {
+            top: -10vh;
+            left: 33vw;
+            background-image: url('car.png');
+        }
+
+        #jupiter {
+            top: 56vh;
+            left: 0vw;
+            background-image: url('jupiter.png');
+        }
+
+        #drone {
+            top: 56vh;
+            left: 66vw;
+            background-image: url('drone.png');
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Clickable Divs -->
+    <div id="rc" class="image" data-url="car.html"></div> <!-- Redirect to car.html -->
+    <div id="jupiter" class="image" data-url="jupiter.html"></div> <!-- Redirect to jupiter.html -->
+    <div id="drone" class="image" data-url="drone.html"></div> <!-- Redirect to drone.html -->
+    <div id="portal" class="portal" data-url="index.html"></div> <!-- Redirect to index.html -->
+
+    <script>
+        // Add click event listeners for all divs with a data-url attribute
+        const clickableDivs = document.querySelectorAll('[data-url]');
+
+        clickableDivs.forEach(div => {
+            div.addEventListener('click', function() {
+                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
+                if (url) {
+                    window.location.href = url; // Redirect to the URL
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

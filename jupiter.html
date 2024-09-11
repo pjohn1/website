@@ -1,0 +1,158 @@
+		<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Pathway Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('jupiter_background.png');
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            background-size: contain;
+            background-repeat: repeat;
+        }
+
+        .gallery-container {
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .video-container {
+            display: inline-flex;
+            justify-content: flex-start;
+            white-space: nowrap; /* Prevent wrapping, allows infinite scrolling */
+            transition: transform 0.5s; /* Smooth transition for movement */
+        }
+
+        .video-container video {
+            width: 20vw;
+            height: 70vh;
+            margin-right: 10vw;
+        }
+
+        .portal {
+            position: absolute;
+            width: 6vw;
+            height: 13vh;
+            background-color: transparent;
+            background-image: url('portal.gif');
+            background-size: cover;
+        }
+
+        #sprite {
+            position: absolute;
+            bottom: 0;
+            left: 5vw;
+            width: 68px;
+            height: 57px;
+            background-image: url("in_rocket_right.png"); /* Change to a sprite image if you want */
+            transition: left 0.5s;
+            background-size: cover;
+        }
+
+        .pathway {
+            position: relative;
+            height: 57px;
+            background-color: transparent;
+            margin: 20px 0;
+        }
+
+        .buttons {
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gallery with Sprite Pathway</h1>
+
+    <div class="gallery-container">
+        <div class="video-container" id="videoContainer"></div>
+
+        <div class="pathway">
+            <div id="home" class="portal" data-url="index.html"></div>
+            <div id="sprite"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const sprite = document.getElementById("sprite");
+        const videoContainer = document.getElementById("videoContainer");
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+        const portal = document.getElementById('home');
+
+const videoFiles = ['videos/IMG_1201.MOV','videos/IMG_1203.MOV','videos/IMG_1240.mov','videos/IMG_1242.MOV','videos/IMG_1767.MOV','videos/IMG_2197.MOV','videos/line_follower.mp4','videos/parking_controller.mp4','videos/safety_controller.mp4'];
+        let currentPosition = 0;
+        let keysPressed = {};
+
+        // Track key presses
+        document.addEventListener('keydown', function (event) {
+            keysPressed[event.key] = true;
+            moveSprite();
+        });
+
+        document.addEventListener('keyup', function (event) {
+            keysPressed[event.key] = false;
+        });
+        // Function to load videos into the gallery
+        function loadVideos() {
+            videoFiles.forEach(video => {
+                const videoElement = document.createElement("video");
+                videoElement.src = video;
+                videoElement.controls = true;
+                videoContainer.appendChild(videoElement);
+            });
+        }
+
+        loadVideos();
+
+        const numVideos = videoFiles.length;
+        width = window.innerWidth;
+        const stepSize = .20*width + .10*width;
+        console.log(stepSize) // Width of video (300px) + margin (20px)
+        let pathwayOffset = 0; // To keep track of how much the background has moved
+
+        // Move sprite to the next position, update the pathway's scroll
+        function moveSprite() {
+            if (keysPressed['a']) { 
+                console.log(currentPosition);
+                pathwayOffset -= stepSize; 
+
+                if (currentPosition == 1)
+                {
+                    portal.style.visibility = 'visible';
+                }
+                
+                if (currentPosition == 0)
+                {
+                    window.location.href = portal.dataset.url;
+                }
+                currentPosition--; 
+                sprite.style.backgroundImage = "url(flying_left.gif)"
+            }
+            if (keysPressed['d']) { 
+                portal.style.visibility = 'hidden';
+                pathwayOffset += stepSize; currentPosition++;
+                sprite.style.backgroundImage = "url(flying_right.gif)"
+             }
+            // sprite.style.left = `${currentPosition * stepSize}px`;
+            videoContainer.style.transform = `translateX(-${pathwayOffset}px)`;
+        }
+
+        // Initialize sprite position
+        moveSprite();
+    </script>
+
+</body>
+</html>

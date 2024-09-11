@@ -41,10 +41,19 @@
             position: absolute;
             width: 51px;
             height: 81px;
-            background-color: transparent; 
             bottom: 10%;
-            left: 1%;
+            left: 0%;
             background-image: url('pj_as_sprite.png');
+            background-size: cover;
+            transform: translate(-1000%,0%);
+        }
+        .textdiv {
+            visibility: hidden;
+            width: 50vw;
+            height: 42vh;
+            left: 0;
+            top: 0;
+            transform: translate(0%,-70%);
             background-size: cover;
         }
         .portal {
@@ -57,23 +66,55 @@
             background-image: url('portal.gif');
             background-size: cover;
         }
+        #ball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('volleyball.png');
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+        #volleyball {
+            background-color: black;
+            z-index: 2;
+        }
+        #tt {
+            background-color: red;
+            transform: translate(-100%,-70%);
+            z-index: 3;
+        }
     </style>
 </head>
 <body>
 
+    <div id="volleyball" class="textdiv"></div>
+    <div id="tt" class="textdiv"></div>
     <div id="game">
         <div id="player"></div>
         <div id="portal" class="portal" data-url="index.html"></div>
+        <div id="ball"></div> <!-- New ball element -->
     </div>
 
     <script>
-        // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');
-        const playerSpeed = 2; // Lower speed for smooth movement
+        const ball = document.getElementById('ball');
+        const portal = document.querySelector('.portal');
+        const vball = document.getElementById('volleyball');
+        const tt = document.getElementById('tt')
+        const playerSpeed = 2;
+        const ballFriction = 0.99;  // Friction to gradually reduce speed
+        const bounceFactor = 1.2;  // Bounce factor to reduce velocity after bouncing
 
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
+        let ballX = game.clientWidth / 2 - ball.clientWidth / 2;
+        let ballY = game.clientHeight / 2 - ball.clientHeight / 2;
+        let ballVelX = 0; // Ball velocity in X direction
+        let ballVelY = 0; // Ball velocity in Y direction
         let keysPressed = {};
 
         // Track key presses
@@ -96,10 +137,24 @@
             player.style.left = playerX + 'px';
 
             checkPortals();
+            applyBallPhysics();
+        }
+        function checkBall() {
+            gameRect = game.getBoundingClientRect();
+            ballRect = ball.getBoundingClientRect();
+            if (ballRect.left < gameRect.right/2)
+            {
+            vball.style.visibility = 'visible';
+            tt.style.visibility = 'hidden';
+            }
+            else if (ballRect.left > gameRect.right/2)
+            {
+            vball.style.visibility = 'hidden';
+            tt.style.visibility = 'visible';
+            }
         }
 
         function checkPortals() {
-            const portals = document.querySelector('.portal');
             const portalRect = portal.getBoundingClientRect();
             const playerRect = player.getBoundingClientRect();
 
@@ -113,9 +168,51 @@
             }
         }
 
+        function applyBallPhysics() {
+            const ballRect = ball.getBoundingClientRect();
+            const playerRect = player.getBoundingClientRect();
+
+            // Check collision between player and ball
+            if (
+                playerRect.left < ballRect.right &&
+                playerRect.right > ballRect.left &&
+                playerRect.top < ballRect.bottom &&
+                playerRect.bottom > ballRect.top
+            ) {
+                // Push the ball slightly in the direction of the player's movement
+                if (keysPressed['w']) ballVelY -= 2;
+                if (keysPressed['s']) ballVelY += 2;
+                if (keysPressed['a']) ballVelX -= 2;
+                if (keysPressed['d']) ballVelX += 2;
+            }
+
+            // Apply velocity to the ball
+            ballX += ballVelX;
+            ballY += ballVelY;
+
+            // Apply friction to slow the ball down
+            ballVelX *= ballFriction;
+            ballVelY *= ballFriction;
+
+            // Check for boundaries and make the ball bounce
+            if (ballX <= 0 || ballX + ball.clientWidth >= game.clientWidth) {
+                ballVelX = -ballVelX * bounceFactor;  // Reverse velocity and apply bounce factor
+                ballX = Math.max(0, Math.min(ballX, game.clientWidth - ball.clientWidth));
+            }
+            if (ballY <= 0 || ballY + ball.clientHeight >= game.clientHeight) {
+                ballVelY = -ballVelY * bounceFactor;  // Reverse velocity and apply bounce factor
+                ballY = Math.max(0, Math.min(ballY, game.clientHeight - ball.clientHeight));
+            }
+
+            // Update ball position
+            ball.style.left = ballX + 'px';
+            ball.style.top = ballY + 'px';
+        }
+
         // Continuously move the player and update the game
         function gameLoop() {
             movePlayer();
+            checkBall();
             requestAnimationFrame(gameLoop);
         }
 

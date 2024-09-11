@@ -14,13 +14,13 @@
             margin: 0;
             padding: 0;
             background-image: url('projects_background.png'); /* Replace with your background image */
-            background-size: contain;  /* Make the background cover the entire viewport */
+            background-size: cover;  /* Make the background cover the entire viewport */
             background-position: center; /* Center the background image */
             /* background-repeat: no-repeat; */
         }
 
         .image {
-            position:absolute;
+            position: absolute;
             width: 40vw;
             height: 40vh;
             background-color: transparent;
@@ -45,14 +45,16 @@
 
         #rc {
             top: 0vh;
-            left: 33vw;
+            left: 50vw;
             background-image: url('car.png');
+            transform: translate(-50%, 0%)
         }
 
         #jupiter {
             top: 56vh;
             left: 0vw;
             background-image: url('jupiter.png');
+            transform: translate(-25%, 0%)
         }
 
         #drone {

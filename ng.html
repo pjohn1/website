@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGC Internship</title>
+    <style>
+        /* Full-page background with no whitespace */
+        /* Ensure the body and html take up the full viewport height */
+        html, body {
+            height: 100vh;            /* Ensure full height of the viewport */
+            width: 100vw;             /* Ensure full width of the viewport */
+            overflow: hidden;        /* Disable scrolling */
+            margin: 0;
+            padding: 0;
+            background-color: black; /* Replace with your background image */  /* Make the background cover the entire viewport */
+            background-position: center; /* Center the background image */
+            background-repeat: repeat;
+        }
+
+        .info {
+            position: absolute;
+            width: 20vw;
+            height: 70vh;
+            left: 60vw;
+            bottom: 10vh;
+            background-color: transparent;
+            /* backdrop-filter: blur(10px); */
+            opacity: 0.8;
+            visibility: hidden;
+            z-index: 2;
+            text-align: center;
+            color:white;
+
+        }
+
+        #game {
+            position: absolute;
+            height: 392px;            /* Ensure full height of the viewport */
+            width: 216px;             /* Ensure full width of the viewport */
+            overflow: hidden;        /* Disable scrolling */
+            left: 42%;
+            bottom: 10%;
+            background-image: url('basepiece.png'); /* Replace with your background image */  /* Make the background cover the entire viewport */
+            /*background-position: center; /* Center the background image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            /* transform: translate(-50%,-50%); */
+            z-index: 0;
+        }
+
+        .piece {
+            position: absolute;
+            background-size: contain;
+            cursor: pointer; /* Show that this is clickable */
+            z-index: 1;
+        }
+
+        .portal {
+            bottom: 0vh;
+            left: 0vw;
+            cursor: pointer; /* Show that this is clickable */
+            z-index: 1;
+        }
+
+        #piece1 {
+            width: 121px;
+            height: 148px;
+            background-image: url('piece1.png');
+        }
+        #piece2 {
+            width: 110px;
+            height: 148px;
+            background-image: url('piece2.png');
+        }
+        #piece3 {
+            width: 115px;
+            height: 43px;
+            background-image: url('piece3.png');
+        }
+        #piece4 {
+            width: 82px;
+            height: 143px;
+            background-image: url('piece4.png');
+        }
+        #piece5 {
+            width: 110px;
+            height: 141px;
+            background-image: url('piece5.png');
+        }
+        #piece6 {
+            width: 112px;
+            height: 91px;
+            background-image: url('piece6.png');
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Clickable Divs -->
+    <div id="game"></div>
+    <h1 class = "text" style="text-align:center;top:0%;left:50%;color:white;z-index:10;">Internship at Northrop Grumman Corporation
+        <h3 class = "text" style="text-align: center;padding-top: 0px;color:white; z-index:11;">June 2022 - Dec 2022</h3>
+    </h1>
+    <div id="portal" class="portal" data-url="internships.html"></div> <!-- Redirect to index.html -->
+    <div id="info1" class="info">
+        <p class="text">Supported the 6DOF Simulation on a team consisting of nine members </p>
+    </div>
+    <div id="info2" class="info">
+        <p class="text">Participated in Jira-enabled weekly sprints with experience as the scrum master</p>
+    </div>
+    <div id="info3" class="info">
+        <p class="text">Upgraded the real time and non-real time simulations for NG rocket trajectory and launch simulations</p>
+    </div>
+    <div id="info4" class="info">
+        <p class="text">Improved unit test drivers written in C++ to ensure desired code functionality</p>
+    </div>
+    <div id="info5" class="info">
+        <p class="text">Conducted independent case studies using Python to verify script and simulation outputs</p>
+    </div>
+    <div id="info6" class="info">
+        <p class="text">Enhanced knowledge in C++, real time closed loop development, GNC standards, and the peer review process</p>
+    </div>
+    <div id="piece1" class="piece"></div>
+    <div id="piece2" class="piece"></div>
+    <div id="piece3" class="piece"></div>
+    <div id="piece4" class="piece"></div>
+    <div id="piece5" class="piece"></div>
+    <div id="piece6" class="piece"></div>
+
+    <script>
+        // Add click event listeners for all divs with a data-url attribute
+        const clickableDivs = document.querySelectorAll('.portal');
+        const draggables = document.querySelectorAll('.piece');
+        const maxLeft = .3*window.innerWidth;
+        const maxTop = .8*window.innerHeight;
+        let offsetX, offsetY, isDragging = false, currentElement = null; curr_info = null;
+
+        for (i=0; i<draggables.length;i++)
+        {
+            console.log(Math.random()*maxLeft);
+            draggables[i].style.left = ""+ Math.round(Math.random() * maxLeft) +'px';
+            console.log(draggables[i].style.left);
+            draggables[i].style.top = ""+Math.round(Math.random() * maxTop) +'px';
+        }
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('mousedown', (e) => {
+                // Set the current element being dragged
+                currentElement = e.target;
+                piece_num = currentElement.id.slice(-1);
+                // console.log('info'+piece_num)
+                curr_info = document.getElementById('info'+piece_num);
+                curr_info.style.visibility = 'visible';
+
+                // Get the initial mouse position and element's offset
+                offsetX = e.clientX - currentElement.offsetLeft;
+                offsetY = e.clientY - currentElement.offsetTop;
+                isDragging = true;
+            });
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging && currentElement) {
+                // Calculate the new position
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+
+                // Move the current element
+                currentElement.style.left = `${x}px`;
+                currentElement.style.top = `${y}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            curr_info.style.visibility = 'hidden';
+            curr_info = null;
+            currentElement = null; // Clear the current element
+        });
+
+        clickableDivs.forEach(div => {
+            div.addEventListener('click', function() {
+                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
+                if (url) {
+                    window.location.href = url; // Redirect to the URL
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

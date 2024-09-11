@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAC Internship</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('jupiter_background.png');
+            overflow: hidden;
+            background-size: cover;
+            background-repeat: repeat;
+            animation: backgroundScroll 10s linear infinite;
+        }
+
+        @keyframes backgroundScroll {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100%;
+            }
+        }
+
+        #player {
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            width: 53px;
+            height: 100px;
+            background-image: url("flying_up.gif");
+            background-size: cover;
+            transform: translate(-50%, 0%);
+            z-index: 100;
+        }
+
+        #right-panel {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 35%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid white;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .star {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background-image: url("star.png"); /* You can use a background image if you like */
+            background-size: cover;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .info {
+            margin-bottom: '10px';
+            background-color: 'lightblue';
+            padding: '10px';
+            border-radius: '5px';
+            visibility: 'hidden';
+            text-align: center;
+        }
+        .portal {
+            right:15%;
+            bottom:0%
+        }
+    </style>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <!-- The right panel where children will be added -->
+    <div id="right-panel">
+        <h3>The Aerospace Corporation Internship
+            <h4 style="padding-top: -5px;">June 2023 - Aug 2023</h4>
+        </h3>
+        <ol id="info-list">
+        </ol>
+    </div>
+    <p id="info1" class="info">Developed a web tool using Python and Flask to display day-of-launch loads information to aid the go/no-go decision process</p>
+    <p id="info2" class="info">Simulated the day-of-launch process with a custom Python script mimicking simulation outputs </p>
+    <p id="info3" class="info">Created another tool that displays and compares vehicle air loads across different missions</p> 
+    <p id="info4" class="info">Hosted department-wide briefs to discuss tool functionalities and gather feedback</p> 
+    <p id="info5" class="info">Gained knowledge in day-of-launch processes, coupled loads analysis, finite element modeling, and vehicle structural
+        dynamics </p>
+    <p id="info6" class="info">You completed the game! Click the portal to return</p>
+    <div id="portal" class="portal" data-url="internships.html"></div>
+
+
+    <script>
+        let player = document.getElementById('player');
+        const infos = document.querySelectorAll('.info');
+        const clickableDivs = document.querySelectorAll('.portal');
+        let spriteNum = -1;
+        let playerPosition = {
+            left: window.innerWidth / 2 - player.offsetWidth / 2
+        };
+        let playerSpeed = 3; // Increase this value for faster movement
+        let keysPressed = {
+            left: false,
+            right: false
+        };
+
+        // Move player based on which keys are pressed
+        function movePlayer() {
+            if (keysPressed.left && playerPosition.left > 0) {
+                playerPosition.left -= playerSpeed;
+            }
+            if (keysPressed.right && playerPosition.left < window.innerWidth - player.offsetWidth) {
+                playerPosition.left += playerSpeed;
+            }
+            player.style.left = playerPosition.left + 'px';
+
+            requestAnimationFrame(movePlayer); // Continuously update movement for smoothness
+        }
+
+        // Listen for keydown events to start moving
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
+                keysPressed.left = true;
+            }
+            if (e.key === 'ArrowRight' || e.key === 'd') {
+                keysPressed.right = true;
+            }
+        });
+
+        // Listen for keyup events to stop moving
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
+                keysPressed.left = false;
+            }
+            if (e.key === 'ArrowRight' || e.key === 'd') {
+                keysPressed.right = false;
+            }
+        });
+
+        // Collision detection
+        function checkCollision(sprite) {
+            let playerRect = player.getBoundingClientRect();
+            let spriteRect = sprite.getBoundingClientRect();
+
+            return !(
+                playerRect.top > spriteRect.bottom ||
+                playerRect.bottom < spriteRect.top ||
+                playerRect.left > spriteRect.right ||
+                playerRect.right < spriteRect.left
+            );
+        }
+
+        // Generate random sprites on the left side of the screen
+        function createSprite() {
+            const sprite = document.createElement('div');
+            sprite.classList.add('star');
+            
+            // Randomize sprite position (left side)
+            const randomLeft = Math.random() * (window.innerWidth * 0.4); // Limit to the left side
+            sprite.style.left = `${randomLeft}px`;
+            sprite.style.top = '10px';
+
+            // Add the sprite to the body
+            document.body.appendChild(sprite);
+
+            // Gravity variables
+            let topPosition = 10;
+            let velocity = 3;
+            const acceleration = 0.00; // Controls the rate of falling
+
+            // Function to make the sprite fall
+            function fall() {
+                velocity += acceleration; // Increase velocity (acceleration effect)
+                topPosition += velocity; // Update position by adding velocity
+
+                sprite.style.top = `${topPosition}px`; // Apply new position
+
+                // Collision detection
+                if (checkCollision(sprite)) {
+                    addSpriteToPanel(); // Add sprite to panel on collision
+                    sprite.remove(); // Remove sprite after collision
+                } else if (topPosition < window.innerHeight) {
+                    requestAnimationFrame(fall); // Continue falling
+                } else {
+                    sprite.remove(); // Remove sprite if it reaches the bottom
+                }
+            }
+
+            // Start the falling animation
+            requestAnimationFrame(fall);
+        }
+
+        // Add a sprite element to the right panel when a collision occurs
+        function addSpriteToPanel() {
+            spriteNum++;
+            console.log(spriteNum);
+            
+            if (spriteNum < infos.length) {
+                const rightPanel = document.getElementById('info-list');
+                const child = infos[spriteNum];
+                rightPanel.appendChild(child);
+
+            }
+            // const collectedSprite = document.createElement('div');
+            // collectedSprite.textContent = 'Collected Sprite';
+            // collectedSprite.style.marginBottom = '10px';
+            // collectedSprite.style.backgroundColor = 'lightblue';
+            // collectedSprite.style.padding = '10px';
+            // collectedSprite.style.borderRadius = '5px';
+
+            // rightPanel.appendChild(collectedSprite);
+        }
+
+        // Generate multiple sprites
+        function generateSprites() {
+            for (let i = 0; i < 1; i++) { // You can change the number of sprites here
+                createSprite();
+            }
+        }
+
+        // Call the function to generate sprites when the page loads
+        window.onload = () => {
+            movePlayer(); // Start the player movement loop
+            generateSprites();
+        };
+
+        clickableDivs.forEach(div => {
+            div.addEventListener('click', function() {
+                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
+                if (url) {
+                    window.location.href = url; // Redirect to the URL
+                }
+            });
+        });
+
+        // Periodically generate new sprites every second
+        setInterval(generateSprites, 3000); // Generate sprites every second
+    </script>
+
+</body>
+</html>

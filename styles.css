@@ -1,0 +1,98 @@
+.portal {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background-color: transparent;
+    background-image: url('portal.gif');
+    background-size: cover;
+}
+
+.sprite {
+    position: absolute;
+    width: 51px;
+    height: 81px;
+    background-color: transparent; 
+    background-image: url('pj_as_sprite.png');
+    background-size: cover;
+}
+
+.portal-text {
+    position: relative;
+    width: 64px;
+    height: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+    transform: translate(0%,-75%);
+}
+.settings-menu {
+    position: absolute;
+    width: 50vw;
+    height: auto;
+    padding: 0px;
+    background-color: rgba(70, 130, 180, 0.9); /* Translucent bluish-gray */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, clean font */
+    color: white; /* White text for better contrast */
+    z-index: 1000;
+    transform: translate(50%,50%);
+    backdrop-filter: blur(10px); /* Optional: adds a blur effect to background */
+    display: none;
+}
+
+.settings-menu h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.settings-menu p {
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.settings-menu label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.settings-menu input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.settings-menu button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4682b4; /* Bluish button */
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.settings-menu button:hover {
+    background-color: #1e90ff; /* Slightly brighter on hover */
+}
+
+#close-settings {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+}
+
+#close-settings:hover {
+    color: #ff6347; /* Red on hover for close button */
+}

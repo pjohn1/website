@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D Platformer with Ground</title>
@@ -19,13 +20,8 @@
             background-color: #87CEEB;
         }
 
-        #sprite {
+        .sprite {
             position: absolute;
-            width: 51px;
-            height: 81px;
-            background-color: transparent;
-            background-image: url('pj_as_sprite.png');
-            background-size: cover;
             bottom: 10%;
             left: 1vw;
         }
@@ -48,14 +44,8 @@
             background-size: cover;
         }
         .portal {
-            position: absolute;
-            width: 6vw;
-            height: 13vh;
             bottom: 10vh;
             left: 80vw;
-            background-image: url('portal.gif'); /* Replace with portal image */
-            background-size: cover;
-            z-index: 0;
         }
 
         #ground {
@@ -69,8 +59,27 @@
     </style>
 </head>
 <body>
+
     <div id="game">
-        <div id="sprite"></div>
+
+        <div id="settings-menu" class="settings-menu">
+            <h3>Menu</h3>
+            <label>
+                Adjust player speed: <input type="number" id="player-speed">
+                <button id="submit-speed" onclick="saveValue()">Submit</button>
+            </label>
+            <p></p>
+            <label>
+                Adjust jump height: <input type="number" id="jump-height">
+                <button id="submit-jump" onclick="saveValue()">Submit</button>
+            </label>
+            <p><b>Note:</b> Too high of jump height might break the game</p>
+            <button id="close-settings" class="settings-button">X</button>
+        </div>
+        
+        <button id="settings-button" class="settings-button">⚙️</button>
+
+        <div id="player" class="sprite"></div>
         <div class="platform" style="top: 70%; left: 20%;"></div>
         <div class="platform" style="top: 50%; left: 40%;"></div>
         <div class="platform" style="top: 30%; left: 60%;"></div>
@@ -82,15 +91,32 @@
     </div>
 
     <script>
-        const sprite = document.getElementById('sprite');
+        function saveValue() {
+            const value1 = document.getElementById('player-speed').value;
+            const value2 = document.getElementById('jump-height').value;
+            localStorage.setItem('playerSpeed', value1);
+            localStorage.setItem('jumpHeight',value2);
+            console.log('saved player speed');
+        }
+
+        let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+        button_value = document.getElementById('player-speed')
+        button_value.value = playerSpeed;
+
+        let jumpHeight= parseFloat(localStorage.getItem('jumpHeight')) || 10;
+        button_value1 = document.getElementById('jump-height')
+        button_value1.value = jumpHeight;
+
+        const sprite = document.getElementById('player');
         const ground = document.getElementById('ground');
         const portal = document.getElementById('portal');
+        const settingsMenu = document.getElementById('settings-menu');
+        const settingsButton = document.getElementById('settings-button');
+        const closeSettingsButton = document.getElementById('close-settings');
         let spriteY = parseInt(window.getComputedStyle(sprite).getPropertyValue('bottom'));
         let spriteX = parseInt(window.getComputedStyle(sprite).getPropertyValue('left'));
         let gravity = 0;
-        let jumpHeight = 10;
         let isJumping = false;
-        let speed = 3; // Smoother and faster movement
         let isMovingLeft = false;
         let isMovingRight = false;
         let platforms = document.querySelectorAll('.platform'); // Including the ground
@@ -99,6 +125,15 @@
         let platformOn = -1;
         let platform = false;
 
+        settingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+        closeSettingsButton.addEventListener('click', function () {
+            settingsMenu.style.display = 'none';
+        });
+
+        
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space' && !isJumping) {
                 jump();
@@ -125,6 +160,7 @@
 
         function jump() {
             isJumping = true;
+            jumpHeight= parseFloat(localStorage.getItem('jumpHeight')) || 10;
             let jumpCount = 0;
             let jumpInterval = setInterval(() => {
                 if (jumpCount < 20) {
@@ -145,7 +181,7 @@
                 if (!onPlatform) {
                     spriteY -= gravity;
                     sprite.style.bottom = spriteY + 'px';
-                    gravity += 0.5; // Faster fall
+                    gravity += 0.2; // Faster fall
                     bottom = ground.getBoundingClientRect().height
                     if (spriteY <= bottom) { // Ground level
                         spriteY = bottom;
@@ -162,6 +198,7 @@
         }
 
         function moveLeft() {
+            let speed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
             if (spriteX > 0) {
                 spriteX -= speed;
                 sprite.style.left = spriteX + 'px';
@@ -169,6 +206,7 @@
         }
 
         function moveRight() {
+            let speed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
             if (spriteX < window.innerWidth - 40) { // Adjusted for sprite width
                 spriteX += speed;
                 sprite.style.left = spriteX + 'px';
@@ -178,8 +216,8 @@
         function inBound( spriteRect, platformRect )
         {
             if (
-                    spriteRect.bottom >= platformRect.top - 5&&
-                    spriteRect.bottom <= platformRect.top + 5&&
+                    spriteRect.bottom >= platformRect.top - jumpHeight/2&&
+                    spriteRect.bottom <= platformRect.top + jumpHeight/2&&
                     spriteRect.left + spriteRect.width > platformRect.left &&
                     spriteRect.left < platformRect.left + platformRect.width
                 ) 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phillip Johnson Profile</title>
@@ -24,24 +25,8 @@
             background-color: burlywood;
             background-size: 64px 64px;
         }
-        #player {
-            position: absolute;
-            width: 51px;
-            height: 81px;
-            background-color: transparent; 
-            top: 50%;
-            left: 50%;
+        .sprite {
             transform: translate(-50%, -50%);
-            background-image: url('pj_as_sprite.png');
-            background-size: cover;
-        }
-        .portal {
-            position: absolute;
-            width: 6vw;
-            height: 13vh;
-            background-color: transparent;
-            background-image: url('portal.gif');
-            background-size: cover;
         }
         #toolbox {
             position: absolute;
@@ -62,6 +47,10 @@
             left: 20%;
             background-image: url('chest.png');
             background-size: cover;
+        }
+        .button {
+            bottom: 0%;
+            right: 0%;
         }
         #internships {
             right: 5%;
@@ -84,24 +73,85 @@
 <body>
 
     <div id="game">
-        <div id="player"></div>
-        <div id="internships" class="portal" data-url="internships.html"></div>
-        <div id="research" class="portal" data-url="research.html"></div>
-        <div id="projects" class="portal" data-url="projects.html"></div>
-        <div id="leadership" class="portal" data-url="leadership.html"></div>
+        <div id="player" class="sprite"></div>
+        <div id="internships" class="portal" data-url="internships.html">
+            <p class="portal-text"> Internships </p>
+        </div>
+        <div id="research" class="portal" data-url="research.html">
+            <p class="portal-text"> Research </p>
+        </div>
+        <div id="projects" class="portal" data-url="projects.html">
+            <p class="portal-text"> Projects </p>
+        </div>
+        <div id="leadership" class="portal" data-url="leadership.html">
+            <p class="portal-text"> Leadership </p>
+        </div>
         <div id="toolbox" data-url="#toolbox"></div>
         <div id="chest" data-url="#chest"></div>
+
+        <div id="settings-menu" class="settings-menu">
+            <h3>Menu</h3>
+            <p><b>Controls:</b> Use WASD to move or simply click on portals to teleport</p>
+            <label>
+                Adjust player speed: <input type="number" value=2 id="player-speed">
+                <button id="submit-speed" onclick="saveValue()">Submit</button>
+            </label>
+            <p></p>
+            <button id="close-settings" class="settings-button">X</button>
+        </div>
+        
+        <button id="settings-button" class="settings-button">⚙️</button>
+        
     </div>
 
     <script>
+        // window.addEventListener('load', () => {
+        //     localStorage.clear();
+        // });
+
+        function saveValue() {
+            const value = document.getElementById('player-speed').value;
+            localStorage.setItem('playerSpeed', value);
+            console.log('saved player speed');
+        }
+
+        let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+        button_value = document.getElementById('player-speed')
+        button_value.value = playerSpeed;
+
         // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');
-        const playerSpeed = 2; // Lower speed for smooth movement
 
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
         let keysPressed = {};
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsMenu = document.getElementById('settings-menu');
+            const settingsButton = document.getElementById('settings-button');
+            const closeSettingsButton = document.getElementById('close-settings');
+            
+            // Check if it's the first load
+            const firstLoad = !localStorage.getItem('settingsOpened');
+            // console.log(firstLoad);
+            
+            // Automatically open on first load
+            if (firstLoad) {
+                settingsMenu.style.display = 'block';
+                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+            }
+
+            // Toggle settings menu visibility on button click
+            settingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close settings menu when close button is clicked
+            closeSettingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = 'none';
+            });
+        });
 
         // Track key presses
         document.addEventListener('keydown', function (event) {
@@ -113,6 +163,7 @@
         });
 
         function movePlayer() {
+            playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w']) playerY -= playerSpeed;
             if (keysPressed['s']) playerY += playerSpeed;
             if (keysPressed['a']) playerX -= playerSpeed;

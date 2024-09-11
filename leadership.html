@@ -105,7 +105,6 @@
         const portal = document.querySelector('.portal');
         const vball = document.getElementById('volleyball');
         const tt = document.getElementById('tt')
-        const playerSpeed = 2;
         const ballFriction = 0.99;  // Friction to gradually reduce speed
         const bounceFactor = 1.2;  // Bounce factor to reduce velocity after bouncing
 
@@ -117,6 +116,7 @@
         let ballVelY = 0; // Ball velocity in Y direction
         let keysPressed = {};
 
+        
         // Track key presses
         document.addEventListener('keydown', function (event) {
             keysPressed[event.key] = true;
@@ -127,6 +127,7 @@
         });
 
         function movePlayer() {
+            let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w']) playerY -= playerSpeed;
             if (keysPressed['s']) playerY += playerSpeed;
             if (keysPressed['a']) playerX -= playerSpeed;

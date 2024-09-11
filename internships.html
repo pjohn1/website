@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phillip Johnson Profile</title>
@@ -53,34 +54,23 @@
             height: 100vh;           /* Full height of the viewport */
         }
 
-        #player {
+        .sprite {
             position: absolute;       /* Absolute positioning relative to the game container */
-            width: 51px;
-            height: 81px;
-            background-color: transparent; 
             bottom: 10%;              /* Place player closer to the bottom */
             left: 5%;                 /* Align player slightly from the left */
-            background-image: url('pj_as_sprite.png'); /* Replace with your sprite image */
-            background-size: cover;
             background-position: center;
             z-index: 1000;
         }
 
         .portal {
-            position: absolute;
-            width: 6vw;
-            height: 13vh;
             bottom: 45%;
             left: 0%;
-            background-color: transparent;
-            background-image: url('portal.gif'); /* Replace with portal image */
-            background-size: cover;
         }
     </style>
 </head>
 <body>
     <div id="game">
-        <div id="player"></div>
+        <div id="player" class="sprite"></div>
         <div id="ng"></div>
         <div id="tac"></div>
         <div id="home" class="portal" data-url="index.html"></div>
@@ -90,7 +80,6 @@
         // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');
-        const playerSpeed = 2; // Lower speed for smooth movement
 
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
@@ -106,6 +95,7 @@
         });
 
         function movePlayer() {
+            let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w']) playerY -= playerSpeed;
             if (keysPressed['s']) playerY += playerSpeed;
             if (keysPressed['a']) playerX -= playerSpeed;

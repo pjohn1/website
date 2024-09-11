@@ -91,7 +91,7 @@
 
         <div id="settings-menu" class="settings-menu">
             <h3>Menu</h3>
-            <p><b>Controls:</b> Use WASD to move or simply click on portals to teleport</p>
+            <p><b>Controls:</b> Use WASD or Arrow Keys to move or simply click on portals to teleport</p>
             <label>
                 Adjust player speed: <input type="number" value=2 id="player-speed">
                 <button id="submit-speed" onclick="saveValue()">Submit</button>
@@ -122,6 +122,7 @@
         // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');
+        const clickableDivs = document.querySelectorAll('[data-url]');
 
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
@@ -164,10 +165,10 @@
 
         function movePlayer() {
             playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
-            if (keysPressed['w']) playerY -= playerSpeed;
-            if (keysPressed['s']) playerY += playerSpeed;
-            if (keysPressed['a']) playerX -= playerSpeed;
-            if (keysPressed['d']) playerX += playerSpeed;
+            if (keysPressed['w'] || keysPressed['ArrowUp']) playerY -= playerSpeed;
+            if (keysPressed['s'] || keysPressed['ArrowDown']) playerY += playerSpeed;
+            if (keysPressed['a'] || keysPressed['ArrowLeft']) playerX -= playerSpeed;
+            if (keysPressed['d'] || keysPressed['ArrowRight']) playerX += playerSpeed;
 
             // Update player position
             player.style.top = playerY + 'px';
@@ -202,6 +203,15 @@
             movePlayer();
             requestAnimationFrame(gameLoop);
         }
+
+        clickableDivs.forEach(div => {
+            div.addEventListener('click', function() {
+                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
+                if (url) {
+                    window.location.href = url; // Redirect to the URL
+                }
+            });
+        });
 
         // Start the game loop
         gameLoop();

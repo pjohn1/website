@@ -1,4 +1,4 @@
-		<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="styles.css">
@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-image: url('jupiter_background.png');
+            background-color: skyblue;
             overflow-x: hidden; /* Prevent horizontal scrolling */
             background-size: contain;
             background-repeat: repeat;
@@ -41,7 +41,7 @@
             left: 5vw;
             width: 68px;
             height: 57px;
-            background-image: url("in_rocket_right.png"); /* Change to a sprite image if you want */
+            background-image: url("drone_right.png"); /* Change to a sprite image if you want */
             transition: left 0.5s;
             background-size: cover;
         }
@@ -131,12 +131,12 @@ const videoFiles = ['videos/IMG_1201.MOV','videos/IMG_1203.MOV','videos/IMG_1240
                     window.location.href = portal.dataset.url;
                 }
                 currentPosition--; 
-                sprite.style.backgroundImage = "url(flying_left.gif)"
+                sprite.style.backgroundImage = "url(drone_flying_left.gif)"
             }
             if (keysPressed['d'] || keysPressed['ArrowRight']) { 
                 portal.style.visibility = 'hidden';
                 pathwayOffset += stepSize; currentPosition++;
-                sprite.style.backgroundImage = "url(flying_right.gif)"
+                sprite.style.backgroundImage = "url(drone_flying_right.gif)"
              }
             // sprite.style.left = `${currentPosition * stepSize}px`;
             videoContainer.style.transform = `translateX(-${pathwayOffset}px)`;

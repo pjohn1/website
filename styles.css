@@ -5,6 +5,7 @@
     background-color: transparent;
     background-image: url('portal.gif');
     background-size: cover;
+    cursor: pointer;
 }
 
 .sprite {
@@ -96,3 +97,32 @@
 #close-settings:hover {
     color: #ff6347; /* Red on hover for close button */
 }
+
+.text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.lists {
+    list-style: none; /* Remove default list style */
+    padding-left: 0;  /* Remove default padding */
+}
+
+.lists li {
+    position: relative;
+    margin-bottom: 10px; /* Space between list items */
+    padding-left: 30px; /* Indent to make room for custom bullet */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Nice modern font */
+    font-size: 1.1em; /* Slightly larger font for readability */
+    line-height: 1.5em; /* Ensure sufficient line height */
+    color: #333; /* Darker text color */
+}
+
+.lists li::before {
+    content: "•"; /* Unicode for a bullet point */
+    font-size: 1.5em; /* Larger bullet */
+    color: #4682b4; /* Nice blue color */
+    position: absolute;
+    left: 0;
+    top: -0.1em; /* Adjust this value to align bullet with text */
+}
+

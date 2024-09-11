@@ -27,11 +27,12 @@
         }
         .info {
             position: absolute;
-            width: 30vw;
+            width: 25vw;
             height: 90vh;
             left: 73vw;
             bottom: 10vh;
-            background-color: black;
+            background-color: transparent;
+            backdrop-filter: blur(5px);
             visibility: hidden;
             z-index: 1;
         }
@@ -42,6 +43,10 @@
             height: 3vw;
             background-image: url('platform.png');
             background-size: cover;
+        }
+        .platform-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 2vw;
         }
         .portal {
             bottom: 10vh;
@@ -64,6 +69,7 @@
 
         <div id="settings-menu" class="settings-menu">
             <h3>Menu</h3>
+            <p><b>Controls:</b> Use WASD or Arrow Keys to move and space bar to jump</p>
             <label>
                 Adjust player speed: <input type="number" id="player-speed">
                 <button id="submit-speed" onclick="saveValue()">Submit</button>
@@ -80,12 +86,41 @@
         <button id="settings-button" class="settings-button">⚙️</button>
 
         <div id="player" class="sprite"></div>
-        <div class="platform" style="top: 70%; left: 20%;"></div>
-        <div class="platform" style="top: 50%; left: 40%;"></div>
-        <div class="platform" style="top: 30%; left: 60%;"></div>
-        <div class="info" id="info1"></div>
-        <div class="info" id="info2"></div>
-        <div class="info" id="info3"></div>
+        <div class="platform" style="top: 70%; left: 20%;">
+            <p class="platform-text"><b>Jan 2021-Jun 2021</b></p>
+        </div>
+        <div class="platform" style="top: 50%; left: 40%;">
+            <p class="platform-text"><b>Sep 2021-Jan 2022</b></p>
+        </div>
+        <div class="platform" style="top: 30%; left: 60%;">
+            <p class="platform-text"><b>Feb 2023-May 2023</b></p>
+        </div>
+        <div class="info" id="info1">
+            <h3 class="text">Tumbledock Project</h1>
+            <ol class="lists">
+                <li>Developed the communication structure between processors of Astrobee robot using ROS Java and Android Studio</li>
+                <li>Participated in data collection and logistics during ground station testing at NASA - Ames and the ISS </li>
+                <li>Designed a script that sent LED telemetry from the robots using ROS Python</li>
+            </ol>
+        </div>
+        <div class="info" id="info2">
+            <h3 class="text">SpinAp Project</h1>
+            <ol class="lists">
+                <li>Designed a GUI displaying data from actuators and sensors in the SpinAp network using ROS, Python, and PyQT</li>
+                <li>Programmed a script for communicated between the GUI and network nodes to set modes and control hardware </li>
+                <li>Maintained precise documentation on scripts using Github </li>
+                <li>Developed closed-loop testing functionality to control subsystem states within the GUI </li>
+            </ol>
+        </div>
+        <div class="info" id="info3">
+            <h3 class="text">Predicting Space Debris through Physics Informed Neural Networks</h1>
+            <ol class="lists">
+                <li>Created a Physics Informed Neural Network using Monte-Carlo simulation data to predict space debris population growth and decay </li>
+                <li>Optimized the model through hyperparameter adjustment and data preprocessing</li>
+                <li>Accelerated model training through multiprocessing and use of the MIT Supercloud High Performance Computing center </li>
+                <li>Aided in creation of a conference abstract submitted to the International Astronautical Congress 2024 </li>
+            </ol>
+        </div>
         <div id="portal" class="portal" data-url="index.html"></div> <!-- Redirect to index.html -->
         <div id="ground"></div> <!-- This is the ground -->
     </div>
@@ -110,6 +145,7 @@
         const sprite = document.getElementById('player');
         const ground = document.getElementById('ground');
         const portal = document.getElementById('portal');
+        const clickableDivs = document.querySelectorAll('[data-url]');
         const settingsMenu = document.getElementById('settings-menu');
         const settingsButton = document.getElementById('settings-button');
         const closeSettingsButton = document.getElementById('close-settings');
@@ -125,6 +161,16 @@
         let platformOn = -1;
         let platform = false;
 
+        document.addEventListener('DOMContentLoaded', function () 
+        {
+
+        const firstLoad = !localStorage.getItem('researchSettings');
+
+        if (firstLoad) {
+                settingsMenu.style.display = 'block';
+                localStorage.setItem('researchSettings', true); // Set it so it won't auto-open again
+            }
+
         settingsButton.addEventListener('click', function () {
                 settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
             });
@@ -133,27 +179,29 @@
             settingsMenu.style.display = 'none';
         });
 
+        });
+
         
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space' && !isJumping) {
                 jump();
             }
 
-            if (event.code === 'KeyA') {
+            if (event.code === 'KeyA' || event.code == 'ArrowLeft') {
                 isMovingLeft = true;
             }
 
-            if (event.code === 'KeyD') {
+            if (event.code === 'KeyD' || event.code == 'ArrowRight') {
                 isMovingRight = true;
             }
         });
 
         document.addEventListener('keyup', (event) => {
-            if (event.code === 'KeyA') {
+            if (event.code === 'KeyA' || event.code == 'ArrowLeft') {
                 isMovingLeft = false;
             }
 
-            if (event.code === 'KeyD') {
+            if (event.code === 'KeyD' || event.code == 'ArrowRight') {
                 isMovingRight = false;
             }
         });
@@ -293,6 +341,15 @@
 
             requestAnimationFrame(gameLoop);
         }
+
+        clickableDivs.forEach(div => {
+            div.addEventListener('click', function() {
+                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
+                if (url) {
+                    window.location.href = url; // Redirect to the URL
+                }
+            });
+        });
 
         gameLoop(); // Start the game loop for smooth movement
     </script>

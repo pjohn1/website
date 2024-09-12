@@ -54,6 +54,18 @@
             background-size: cover;
         }
 
+        .settings-menu {
+            left:0%;
+            bottom:50%;
+        }
+        .settings-button {
+            position:absolute;
+            top:0%;
+            right:0%;
+            z-index: 101;
+            cursor: pointer;
+        }
+
         .portal {
             bottom: 40vh;
             left: 0vw;
@@ -84,6 +96,16 @@
 </head>
 <body>
 
+    <div id="settings-menu" class="settings-menu">
+        <h3>Menu</h3>
+        <p><b>Controls:</b> Use WASD or Arrow Keys to move and space bar to jump</p>
+        <p></p>
+        <button id="close-settings" class="settings-button">X</button>
+    </div>
+
+    <button id="settings-button1" class="settings-button">⚙️</button>
+    
+
     <div id="volleyball" class="textdiv">
         <h1 class="text">MIT Men's Varsity Volleyball Captain</h1>
         <ol class="lists">
@@ -105,6 +127,33 @@
     </div>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsMenu = document.getElementById('settings-menu');
+            const settingsButton = document.getElementById('settings-button1');
+            const closeSettingsButton = document.getElementById('close-settings');
+            
+            // Check if it's the first load
+            const firstLoad = !localStorage.getItem('settingsOpened');
+            // console.log(firstLoad);
+            
+            // Automatically open on first load
+            if (firstLoad) {
+                settingsMenu.style.display = 'block';
+                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+            }
+
+            // Toggle settings menu visibility on button click
+            settingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close settings menu when close button is clicked
+            closeSettingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = 'none';
+            });
+        });
+
         const player = document.getElementById('player');
         const game = document.getElementById('game');
         const ball = document.getElementById('ball');

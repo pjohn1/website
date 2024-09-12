@@ -61,6 +61,15 @@
 </head>
 <body>
 
+    <div id="settings-menu" class="settings-menu">
+        <h3>Menu</h3>
+        <p><b>Click on each icon to learn more about that specific project!</b> </p>
+        <p>Use the A/Left arrow key to move left and D/Right arrow key to move right</p>
+        <button id="close-settings" class="settings-button">X</button>
+    </div>
+    
+    <button id="settings-button" class="settings-button">⚙️</button>
+
     <!-- Clickable Divs -->
     <div id="rc" class="image" data-url="car.html"></div> <!-- Redirect to car.html -->
     <div id="jupiter" class="image" data-url="jupiter.html"></div> <!-- Redirect to jupiter.html -->
@@ -68,6 +77,33 @@
     <div id="portal" class="portal" data-url="index.html"></div> <!-- Redirect to index.html -->
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsMenu = document.getElementById('settings-menu');
+            const settingsButton = document.getElementById('settings-button');
+            const closeSettingsButton = document.getElementById('close-settings');
+            
+            // Check if it's the first load
+            const firstLoad = !localStorage.getItem('settingsOpened');
+            // console.log(firstLoad);
+            
+            // Automatically open on first load
+            if (firstLoad) {
+                settingsMenu.style.display = 'block';
+                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+            }
+
+            // Toggle settings menu visibility on button click
+            settingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close settings menu when close button is clicked
+            closeSettingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = 'none';
+            });
+        });
+
         // Add click event listeners for all divs with a data-url attribute
         const clickableDivs = document.querySelectorAll('[data-url]');
 

@@ -9,20 +9,36 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-image: url('jupiter_background.png');
+            /* background-image: url('jupiter_background.png');*/
             overflow: hidden;
             background-size: cover;
             background-repeat: repeat;
-            animation: backgroundScroll 10s linear infinite;
+            /* animation: backgroundScroll 10s linear infinite;
+            animation-fill-mode: forwards;
+            will-change: background-position; */
         }
 
         @keyframes backgroundScroll {
             0% {
-                background-position: 0 0;
+                background-position: 0 0%;
             }
             100% {
                 background-position: 0 100%;
             }
+        }
+
+        #background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vw;
+            z-index: -1; /* Make sure it's behind other elements */
+            background-image: url('space_background.png');
+            background-size: 100vw auto;
+            background-repeat: repeat-y; /* Repeat only vertically */
+            background-position: 0 0;
+            animation: backgroundScroll 10s linear infinite;
         }
 
         #player {
@@ -44,8 +60,8 @@
             width: 35%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.1);
-            border: 2px solid white;
-            color: white;
+            border: 2px solid thistle;
+            color:thistle;
             padding: 10px;
             text-align: center;
             overflow-y: auto;
@@ -66,7 +82,8 @@
             background-color: 'lightblue';
             padding: '10px';
             border-radius: '5px';
-            visibility: 'hidden';
+            /* visibility: 'hidden'; */
+            display: none;
             text-align: center;
         }
         .portal {
@@ -78,6 +95,7 @@
 <body>
 
     <div id="player"></div>
+    <div id="background-animation"></div>
 
     <!-- The right panel where children will be added -->
     <div id="right-panel">
@@ -205,6 +223,7 @@
             if (spriteNum < infos.length) {
                 const rightPanel = document.getElementById('info-list');
                 const child = infos[spriteNum];
+                child.style.display = 'block';
                 rightPanel.appendChild(child);
 
             }

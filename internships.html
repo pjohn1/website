@@ -84,6 +84,12 @@
             z-index: 1000;
         }
 
+        .settings-button {
+            right:0%;
+            bottom:0%;
+            z-index: 100;
+        }
+
         .portal {
             bottom: 45%;
             left: 0%;
@@ -91,6 +97,16 @@
     </style>
 </head>
 <body>
+
+    <div id="settings-menu" class="settings-menu">
+        <h3>Menu</h3>
+        <p><b>Click on each door to learn more about my internships!</b> </p>
+        <p></p>
+        <button id="close-settings" class="settings-button">X</button>
+    </div>
+    
+    <button id="settings-button" class="settings-button">⚙️</button>
+
     <div id="game">
         <div id="player" class="sprite"></div>
         <div id="ng">
@@ -103,6 +119,34 @@
     </div>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const settingsMenu = document.getElementById('settings-menu');
+            const settingsButton = document.getElementById('settings-button');
+            const closeSettingsButton = document.getElementById('close-settings');
+            
+            // Check if it's the first load
+            const firstLoad = !localStorage.getItem('settingsOpened');
+            // console.log(firstLoad);
+            
+            // Automatically open on first load
+            if (firstLoad) {
+                settingsMenu.style.display = 'block';
+                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+            }
+
+            // Toggle settings menu visibility on button click
+            settingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close settings menu when close button is clicked
+            closeSettingsButton.addEventListener('click', function () {
+                settingsMenu.style.display = 'none';
+            });
+        });
+
+
         // Player movement logic with continuous movement and smooth scrolling background
         const player = document.getElementById('player');
         const game = document.getElementById('game');

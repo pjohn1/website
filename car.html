@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: sienna;
+            background-color: slategray;
             overflow-x: hidden; /* Prevent horizontal scrolling */
             background-size: contain;
             background-repeat: repeat;
@@ -27,12 +27,6 @@
             justify-content: flex-start;
             white-space: nowrap; /* Prevent wrapping, allows infinite scrolling */
             transition: transform 0.5s; /* Smooth transition for movement */
-        }
-
-        .video-container video {
-            width: 20vw;
-            height: 70vh;
-            margin-right: 10vw;
         }
 
         #sprite {
@@ -61,14 +55,85 @@
             padding: 10px 20px;
             font-size: 18px;
         }
+        .child {
+            width: 20vw;
+            height: 70vh;
+            bottom: 0%;
+            margin-right: 10vw;
+            text-align: center;
+            text-overflow: clip;
+            color: whitesmoke;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+        .child-text {
+            display: inline-block;
+            width: 20vw;
+            height: 70vh;
+            margin-right: 10vw;
+            background-color: transparent;
+            text-wrap: wrap;
+            /* z-index: 2; */
+            text-align: center;
+            color:lightblue;
+        }
+        
+        #incont32 {
+            background-image: url("ab.png");
+            width: 20vw;
+            height: 28vh;
+            margin-bottom: 10px;
+        }
+        #incont3{
+            background-image: url("r.png");
+            width: 20vw;
+            height: 30vh;
+            margin-top: 10px;
+        }
+        #cont7{
+            background-image: url("stoplight.png");
+        }
     </style>
 </head>
 <body>
 
-    <h1>Gallery with Sprite Pathway</h1>
+    <h1 class="text" style="color: lightblue;">Robotics: Systems and Signals</h1>
 
     <div class="gallery-container">
-        <div class="video-container" id="videoContainer"></div>
+        <div class="video-container" id="videoContainer">
+            <div id="cont1" class="child-text">
+                <p> Collaborated with a team of 5 students to program a fully autonomous miniature race car to compete in a final competition 
+                    that involved racing on an indoor track and navigating the hallways of a basement with checkpoints and obstacles </p>
+            </div>
+            <div id="cont2" class="child-text">
+                <p>Leveraged ROS2 and a lidar scan of the basement to test and implement different path-planning algorithms (BFS, A*, RRT, 
+                    and RRT*)</p>
+            </div>
+            <div id="cont3" class="child">
+                <p style="color: lightblue;">Search Algorithms with Path Length:</p>
+                <div id="incont3" class="child"></div>
+                <div id="incont32" class="child"></div>
+            </div>
+            <div id="cont4" class="child-text">
+                <p>Implemented a Proportional-Derivative (PD) controller for track navigation and a pure pursuit controller for the basement</p>
+            </div>
+            <div id="cont5" class="child">
+                <p style="color: lightblue;">RC autonomously driving track (LOUD)</p>
+                <video class="child" controls="true" src="rc_track.mov"></video>
+            </div>
+            <div id="cont6" class="child-text">
+                <p>Used computer vision (OpenCV) and pre-trained machine learning packages for obstacle avoidance and stop light recognition</p>
+            </div>
+            <div id="cont7" class="child"></div>
+            <div id="cont8" class="child-text">
+                <p>Localized the robot using an adjusted Monte Carlo localization algorithm </p>
+            </div>
+            <div id="cont9" class="child">
+                <p style="color: lightblue;">Montecarlo Localization using lidar scan data</p>
+                <video class="child" controls="true" src="montecarlo.mp4"></video>
+            </div>
+        </div>
 
         <div class="pathway">
             <div id="home" class="portal" data-url="projects.html"></div>
@@ -84,9 +149,14 @@
         const rightBtn = document.getElementById("rightBtn");
         const portal = document.getElementById('home');
 
-const videoFiles = ['videos/IMG_1201.MOV','videos/IMG_1203.MOV','videos/IMG_1240.mov','videos/IMG_1242.MOV','videos/IMG_1767.MOV','videos/IMG_2197.MOV','videos/line_follower.mp4','videos/parking_controller.mp4','videos/safety_controller.mp4'];
+        const children = document.querySelectorAll('.child');
         let currentPosition = 0;
         let keysPressed = {};
+        const numVideos = children.length;
+        width = window.innerWidth;
+        const stepSize = .20*width + .10*width;
+        console.log(stepSize) // Width of video (300px) + margin (20px)
+        let pathwayOffset = 0; // To keep track of how much the background has moved
 
         // Track key presses
         document.addEventListener('keydown', function (event) {
@@ -98,22 +168,6 @@ const videoFiles = ['videos/IMG_1201.MOV','videos/IMG_1203.MOV','videos/IMG_1240
             keysPressed[event.key] = false;
         });
         // Function to load videos into the gallery
-        function loadVideos() {
-            videoFiles.forEach(video => {
-                const videoElement = document.createElement("video");
-                videoElement.src = video;
-                videoElement.controls = true;
-                videoContainer.appendChild(videoElement);
-            });
-        }
-
-        loadVideos();
-
-        const numVideos = videoFiles.length;
-        width = window.innerWidth;
-        const stepSize = .20*width + .10*width;
-        console.log(stepSize) // Width of video (300px) + margin (20px)
-        let pathwayOffset = 0; // To keep track of how much the background has moved
 
         // Move sprite to the next position, update the pathway's scroll
         function moveSprite() {

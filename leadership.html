@@ -67,7 +67,7 @@
         }
 
         .portal {
-            bottom: 40vh;
+            bottom: 0vh;
             left: 0vw;
             z-index: 100;
         }
@@ -128,7 +128,9 @@
     </div>
     <div id="game">
         <div id="player" class="sprite"></div>
-        <div class="portal" data-url="index.html"></div>
+        <div class="portal" data-url="index.html">
+            <p class="text" style="color: black;transform:translate(100%,50%);">&#8592; Back</p>
+        </div>
         <div id="ball"></div> <!-- New ball element -->
     </div>
 

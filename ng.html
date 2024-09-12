@@ -94,6 +94,22 @@
             height: 91px;
             background-image: url('piece6.png');
         }
+        #finaldiv {
+            position: absolute;
+            left: 78vw;
+            top: 0%;
+            width: 20vw;
+            height: 80vh;
+            color: white;
+            text-align: center;
+            display: none;
+        }
+
+        .prevent-select {
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none; /* Standard syntax */
+            }
 
 
     </style>
@@ -102,8 +118,8 @@
 
     <!-- Clickable Divs -->
     <div id="game"></div>
-    <h1 class = "text" style="text-align:center;top:0%;left:50%;color:white;z-index:10;">Internship at Northrop Grumman Corporation
-        <h3 class = "text" style="text-align: center;padding-top: 0px;color:white; z-index:11;">June 2022 - Dec 2022</h3>
+    <h1 class = "text prevent-select" style="text-align:center;top:0%;left:50%;color:white;z-index:10;">Internship at Northrop Grumman Corporation
+        <h3 class = "text prevent-select" style="text-align: center;padding-top: 0px;color:white; z-index:11;">June 2022 - Dec 2022</h3>
     </h1>
     <div id="portal" class="portal" data-url="internships.html"></div> <!-- Redirect to index.html -->
     <div id="info1" class="info">
@@ -130,20 +146,29 @@
     <div id="piece4" class="piece"></div>
     <div id="piece5" class="piece"></div>
     <div id="piece6" class="piece"></div>
+    <div id="finaldiv">
+        <h1 class="text">NGC Internship Accomplishments</h1>
+        <p class="text">Supported the 6DOF Simulation on a team consisting of nine members </p>
+        <p class="text">Participated in Jira-enabled weekly sprints with experience as the scrum master</p>
+        <p class="text">Upgraded the real time and non-real time simulations for NG rocket trajectory and launch simulations</p>
+        <p class="text">Improved unit test drivers written in C++ to ensure desired code functionality</p>
+        <p class="text">Conducted independent case studies using Python to verify script and simulation outputs</p>
+        <p class="text">Enhanced knowledge in C++, real time closed loop development, GNC standards, and the peer review process</p>
+    </div>
 
     <script>
         // Add click event listeners for all divs with a data-url attribute
+        const gameRect = document.getElementById('game').getBoundingClientRect();
         const clickableDivs = document.querySelectorAll('.portal');
         const draggables = document.querySelectorAll('.piece');
         const maxLeft = .3*window.innerWidth;
         const maxTop = .8*window.innerHeight;
+        const finaldiv = document.getElementById('finaldiv');
         let offsetX, offsetY, isDragging = false, currentElement = null; curr_info = null;
 
         for (i=0; i<draggables.length;i++)
         {
-            console.log(Math.random()*maxLeft);
             draggables[i].style.left = ""+ Math.round(Math.random() * maxLeft) +'px';
-            console.log(draggables[i].style.left);
             draggables[i].style.top = ""+Math.round(Math.random() * maxTop) +'px';
         }
 
@@ -175,11 +200,37 @@
             }
         });
 
+        function inBound(rect1,rect2)
+        {
+            if (
+            rect1.left < rect2.right &&
+            rect1.right > rect2.left &&
+            rect1.top < rect2.bottom &&
+            rect1.bottom > rect2.top
+            ) {
+            return true;
+            }
+            return false;
+        }
+
         document.addEventListener('mouseup', () => {
+            let gameOver = true;
             isDragging = false;
             curr_info.style.visibility = 'hidden';
             curr_info = null;
             currentElement = null; // Clear the current element
+
+            for (i=0;i<draggables.length;i++)
+            {
+                if ( !inBound(draggables[i].getBoundingClientRect(), gameRect) )
+                {
+                    console.log(i);
+                    gameOver = false;
+                }
+            }
+            if (gameOver){
+                finaldiv.style.display = 'inline';
+            }
         });
 
         clickableDivs.forEach(div => {

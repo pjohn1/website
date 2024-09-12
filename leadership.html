@@ -98,7 +98,12 @@
 
     <div id="settings-menu" class="settings-menu">
         <h3>Menu</h3>
-        <p><b>Controls:</b> Use WASD or Arrow Keys to move and space bar to jump</p>
+        <p><b>Controls:</b> Use WASD or Arrow Keys to move</p>
+        <p>Run into the volleyball and see what happens!</p>
+        <label>
+            Adjust player speed: <input type="number" value=2 id="player-speed">
+            <button id="submit-speed" onclick="saveValue()">Submit</button>
+        </label>
         <p></p>
         <button id="close-settings" class="settings-button">X</button>
     </div>
@@ -127,6 +132,12 @@
     </div>
 
     <script>
+
+        function saveValue() {
+            const value = document.getElementById('player-speed').value;
+            sessionStorage.setItem('playerSpeed', value);
+            console.log('saved player speed');
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             const settingsMenu = document.getElementById('settings-menu');
@@ -160,6 +171,7 @@
         const portal = document.querySelector('.portal');
         const vball = document.getElementById('volleyball');
         const tt = document.getElementById('tt')
+        let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
         const clickableDivs = document.querySelectorAll('[data-url]');
         const ballFriction = 0.99;  // Friction to gradually reduce speed
         const bounceFactor = 1.2;  // Bounce factor to reduce velocity after bouncing
@@ -183,7 +195,7 @@
         });
 
         function movePlayer() {
-            let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
+            playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w'] || keysPressed['ArrowUp']) playerY -= playerSpeed;
             if (keysPressed['s'] || keysPressed['ArrowDown']) playerY += playerSpeed;
             if (keysPressed['a'] || keysPressed['ArrowLeft']) playerX -= playerSpeed;
@@ -226,15 +238,16 @@
         }
 
         function applyBallPhysics() {
+            playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             const ballRect = ball.getBoundingClientRect();
             const playerRect = player.getBoundingClientRect();
 
             // Check collision between player and ball
             if (
-                playerRect.left < ballRect.right &&
-                playerRect.right > ballRect.left &&
-                playerRect.top < ballRect.bottom &&
-                playerRect.bottom > ballRect.top
+                playerRect.left < ballRect.right + playerSpeed &&
+                playerRect.right > ballRect.left + playerSpeed&&
+                playerRect.top < ballRect.bottom + playerSpeed &&
+                playerRect.bottom > ballRect.top + playerSpeed
             ) {
                 // Push the ball slightly in the direction of the player's movement
                 if (keysPressed['w']) ballVelY -= 2;

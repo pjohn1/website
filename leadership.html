@@ -104,6 +104,7 @@
             Adjust player speed: <input type="number" value=2 id="player-speed">
             <button id="submit-speed" onclick="saveValue()">Submit</button>
         </label>
+        <p><b>Note:</b>This sometimes does not work on non-Chrome browsers, so you can also just click and teleport the ball around</p>
         <p></p>
         <button id="close-settings" class="settings-button">X</button>
     </div>
@@ -132,101 +133,89 @@
     </div>
 
     <script>
-
-        function saveValue() {
-            const value = document.getElementById('player-speed').value;
-            sessionStorage.setItem('playerSpeed', value);
-            console.log('saved player speed');
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             const settingsMenu = document.getElementById('settings-menu');
             const settingsButton = document.getElementById('settings-button1');
             const closeSettingsButton = document.getElementById('close-settings');
-            
+    
             // Check if it's the first load
             const firstLoad = !sessionStorage.getItem('settingsOpened-leadership');
-            // console.log(firstLoad);
             
             // Automatically open on first load
             if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                sessionStorage.setItem('settingsOpened-leadership', true); // Set it so it won't auto-open again
+                sessionStorage.setItem('settingsOpened-leadership', true);
             }
-
+    
             // Toggle settings menu visibility on button click
             settingsButton.addEventListener('click', function () {
                 settingsMenu.style.display = settingsMenu.style.display === 'block' ? 'none' : 'block';
             });
-
+    
             // Close settings menu when close button is clicked
             closeSettingsButton.addEventListener('click', function () {
                 settingsMenu.style.display = 'none';
             });
         });
-
+    
         const player = document.getElementById('player');
         const game = document.getElementById('game');
         const ball = document.getElementById('ball');
         const portal = document.querySelector('.portal');
         const vball = document.getElementById('volleyball');
-        const tt = document.getElementById('tt')
-        let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
-        const clickableDivs = document.querySelectorAll('[data-url]');
-        const ballFriction = 0.99;  // Friction to gradually reduce speed
-        const bounceFactor = 1.2;  // Bounce factor to reduce velocity after bouncing
-
+        const tt = document.getElementById('tt');
+        let playerSpeed = parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
+        const ballFriction = 0.99;
+        const bounceFactor = 1.2;
+    
         let playerX = game.clientWidth / 2 - player.clientWidth / 2;
         let playerY = game.clientHeight / 2 - player.clientHeight / 2;
         let ballX = game.clientWidth / 2 - ball.clientWidth / 2;
         let ballY = game.clientHeight / 2 - ball.clientHeight / 2;
-        let ballVelX = 0; // Ball velocity in X direction
-        let ballVelY = 0; // Ball velocity in Y direction
+        let ballVelX = 0;
+        let ballVelY = 0;
         let keysPressed = {};
-
-        
+    
         // Track key presses
         document.addEventListener('keydown', function (event) {
             keysPressed[event.key] = true;
         });
-
+    
         document.addEventListener('keyup', function (event) {
             keysPressed[event.key] = false;
         });
-
+    
         function movePlayer() {
-            playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
+            playerSpeed = parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w'] || keysPressed['ArrowUp']) playerY -= playerSpeed;
             if (keysPressed['s'] || keysPressed['ArrowDown']) playerY += playerSpeed;
             if (keysPressed['a'] || keysPressed['ArrowLeft']) playerX -= playerSpeed;
             if (keysPressed['d'] || keysPressed['ArrowRight']) playerX += playerSpeed;
-
+    
             // Update player position
             player.style.top = playerY + 'px';
             player.style.left = playerX + 'px';
-
+    
             checkPortals();
             applyBallPhysics();
         }
+    
         function checkBall() {
-            gameRect = game.getBoundingClientRect();
-            ballRect = ball.getBoundingClientRect();
-            if (ballRect.left < gameRect.right/2)
-            {
-            vball.style.visibility = 'visible';
-            tt.style.visibility = 'hidden';
-            }
-            else if (ballRect.left > gameRect.right/2)
-            {
-            vball.style.visibility = 'hidden';
-            tt.style.visibility = 'visible';
+            const gameRect = game.getBoundingClientRect();
+            const ballRect = ball.getBoundingClientRect();
+            if (ballRect.left < gameRect.right / 2) {
+                vball.style.visibility = 'visible';
+                tt.style.visibility = 'hidden';
+            } else if (ballRect.left > gameRect.right / 2) {
+                vball.style.visibility = 'hidden';
+                tt.style.visibility = 'visible';
             }
         }
-
+    
         function checkPortals() {
             const portalRect = portal.getBoundingClientRect();
             const playerRect = player.getBoundingClientRect();
-
+    
             if (
                 playerRect.left < portalRect.right &&
                 playerRect.right > portalRect.left &&
@@ -236,68 +225,64 @@
                 window.location.href = portal.dataset.url; // Navigate to the next page
             }
         }
-
+    
         function applyBallPhysics() {
-            playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
+            playerSpeed = parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             const ballRect = ball.getBoundingClientRect();
             const playerRect = player.getBoundingClientRect();
-
+    
             // Check collision between player and ball
             if (
                 playerRect.left < ballRect.right + playerSpeed &&
-                playerRect.right > ballRect.left + playerSpeed&&
+                playerRect.right > ballRect.left + playerSpeed &&
                 playerRect.top < ballRect.bottom + playerSpeed &&
                 playerRect.bottom > ballRect.top + playerSpeed
             ) {
-                // Push the ball slightly in the direction of the player's movement
                 if (keysPressed['w']) ballVelY -= 2;
                 if (keysPressed['s']) ballVelY += 2;
                 if (keysPressed['a']) ballVelX -= 2;
                 if (keysPressed['d']) ballVelX += 2;
             }
-
-            // Apply velocity to the ball
+    
             ballX += ballVelX;
             ballY += ballVelY;
-
-            // Apply friction to slow the ball down
+    
             ballVelX *= ballFriction;
             ballVelY *= ballFriction;
-
-            // Check for boundaries and make the ball bounce
+    
             if (ballX <= 0 || ballX + ball.clientWidth >= game.clientWidth) {
-                ballVelX = -ballVelX * bounceFactor;  // Reverse velocity and apply bounce factor
+                ballVelX = -ballVelX * bounceFactor;
                 ballX = Math.max(0, Math.min(ballX, game.clientWidth - ball.clientWidth));
             }
             if (ballY <= 0 || ballY + ball.clientHeight >= game.clientHeight) {
-                ballVelY = -ballVelY * bounceFactor;  // Reverse velocity and apply bounce factor
+                ballVelY = -ballVelY * bounceFactor;
                 ballY = Math.max(0, Math.min(ballY, game.clientHeight - ball.clientHeight));
             }
-
-            // Update ball position
+    
             ball.style.left = ballX + 'px';
             ball.style.top = ballY + 'px';
         }
-
-        // Continuously move the player and update the game
+    
+        // Move the ball to where the user clicks
+        game.addEventListener('click', function (event) {
+            const rect = game.getBoundingClientRect();
+            const clickX = event.clientX - rect.left - ball.clientWidth / 2;
+            const clickY = event.clientY - rect.top - ball.clientHeight / 2;
+    
+            // Animate the ball to move towards the clicked position
+            ballX = clickX;
+            ballY = clickY;
+        });
+    
         function gameLoop() {
             movePlayer();
             checkBall();
             requestAnimationFrame(gameLoop);
         }
-
-        clickableDivs.forEach(div => {
-            div.addEventListener('click', function() {
-                const url = div.getAttribute('data-url'); // Get the URL from the data-url attribute
-                if (url) {
-                    window.location.href = url; // Redirect to the URL
-                }
-            });
-        });
-
-        // Start the game loop
+    
         gameLoop();
     </script>
+    
 
 </body>
 </html>

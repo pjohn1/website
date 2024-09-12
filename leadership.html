@@ -134,13 +134,13 @@
             const closeSettingsButton = document.getElementById('close-settings');
             
             // Check if it's the first load
-            const firstLoad = !localStorage.getItem('settingsOpened');
+            const firstLoad = !localStorage.getItem('settingsOpened-leadership');
             // console.log(firstLoad);
             
             // Automatically open on first load
             if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+                localStorage.setItem('settingsOpened-leadership', true); // Set it so it won't auto-open again
             }
 
             // Toggle settings menu visibility on button click

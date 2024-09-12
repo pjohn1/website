@@ -134,13 +134,13 @@
             const closeSettingsButton = document.getElementById('close-settings');
             
             // Check if it's the first load
-            const firstLoad = !localStorage.getItem('settingsOpened-leadership');
+            const firstLoad = !sessionStorage.getItem('settingsOpened-leadership');
             // console.log(firstLoad);
             
             // Automatically open on first load
             if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                localStorage.setItem('settingsOpened-leadership', true); // Set it so it won't auto-open again
+                sessionStorage.setItem('settingsOpened-leadership', true); // Set it so it won't auto-open again
             }
 
             // Toggle settings menu visibility on button click
@@ -183,7 +183,7 @@
         });
 
         function movePlayer() {
-            let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+            let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w'] || keysPressed['ArrowUp']) playerY -= playerSpeed;
             if (keysPressed['s'] || keysPressed['ArrowDown']) playerY += playerSpeed;
             if (keysPressed['a'] || keysPressed['ArrowLeft']) playerX -= playerSpeed;

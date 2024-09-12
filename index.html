@@ -185,16 +185,16 @@
 
     <script>
         // window.addEventListener('load', () => {
-        //     localStorage.clear();
+        //     sessionStorage.clear();
         // });
 
         function saveValue() {
             const value = document.getElementById('player-speed').value;
-            localStorage.setItem('playerSpeed', value);
+            sessionStorage.setItem('playerSpeed', value);
             console.log('saved player speed');
         }
 
-        let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+        let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
         button_value = document.getElementById('player-speed')
         button_value.value = playerSpeed;
 
@@ -264,13 +264,13 @@
             const closeSettingsButton = document.getElementById('close-settings');
             
             // Check if it's the first load
-            const firstLoad = !localStorage.getItem('settingsOpened');
+            const firstLoad = !sessionStorage.getItem('settingsOpened');
             // console.log(firstLoad);
             
             // Automatically open on first load
             if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                localStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
+                sessionStorage.setItem('settingsOpened', true); // Set it so it won't auto-open again
             }
 
             // Toggle settings menu visibility on button click
@@ -294,7 +294,7 @@
         });
 
         function movePlayer() {
-            playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+            playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w'] || keysPressed['ArrowUp']) playerY -= playerSpeed;
             if (keysPressed['s'] || keysPressed['ArrowDown']) playerY += playerSpeed;
             if (keysPressed['a'] || keysPressed['ArrowLeft']) playerX -= playerSpeed;

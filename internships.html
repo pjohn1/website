@@ -126,13 +126,13 @@
             const closeSettingsButton = document.getElementById('close-settings');
             
             // Check if it's the first load
-            const firstLoad = !localStorage.getItem('settingsOpened-internships');
+            const firstLoad = !sessionStorage.getItem('settingsOpened-internships');
             // console.log(firstLoad);
             
             // Automatically open on first load
             if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                localStorage.setItem('settingsOpened-internships', true); // Set it so it won't auto-open again
+                sessionStorage.setItem('settingsOpened-internships', true); // Set it so it won't auto-open again
             }
 
             // Toggle settings menu visibility on button click
@@ -166,7 +166,7 @@
         });
 
         function movePlayer() {
-            let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+            let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (keysPressed['w']) playerY -= playerSpeed;
             if (keysPressed['s']) playerY += playerSpeed;
             if (keysPressed['a']) playerX -= playerSpeed;

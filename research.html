@@ -131,16 +131,16 @@
         function saveValue() {
             const value1 = document.getElementById('player-speed').value;
             const value2 = document.getElementById('jump-height').value;
-            localStorage.setItem('playerSpeed', value1);
-            localStorage.setItem('jumpHeight',value2);
+            sessionStorage.setItem('playerSpeed', value1);
+            sessionStorage.setItem('jumpHeight',value2);
             console.log('saved player speed');
         }
 
-        let playerSpeed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+        let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
         button_value = document.getElementById('player-speed')
         button_value.value = playerSpeed;
 
-        let jumpHeight= parseFloat(localStorage.getItem('jumpHeight')) || 10;
+        let jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 10;
         button_value1 = document.getElementById('jump-height')
         button_value1.value = jumpHeight;
 
@@ -166,11 +166,11 @@
         document.addEventListener('DOMContentLoaded', function () 
         {
 
-        const firstLoad = !localStorage.getItem('researchSettings');
+        const firstLoad = !sessionStorage.getItem('researchSettings');
 
         if (firstLoad) {
                 settingsMenu.style.display = 'block';
-                localStorage.setItem('researchSettings', true); // Set it so it won't auto-open again
+                sessionStorage.setItem('researchSettings', true); // Set it so it won't auto-open again
             }
 
         settingsButton.addEventListener('click', function () {
@@ -210,7 +210,7 @@
 
         function jump() {
             isJumping = true;
-            jumpHeight= parseFloat(localStorage.getItem('jumpHeight')) || 10;
+            jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 10;
             let jumpCount = 0;
             let jumpInterval = setInterval(() => {
                 if (jumpCount < 20) {
@@ -248,7 +248,7 @@
         }
 
         function moveLeft() {
-            let speed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+            let speed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (spriteX > 0) {
                 spriteX -= speed;
                 sprite.style.left = spriteX + 'px';
@@ -256,7 +256,7 @@
         }
 
         function moveRight() {
-            let speed= parseFloat(localStorage.getItem('playerSpeed')) || 2;
+            let speed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
             if (spriteX < window.innerWidth - 40) { // Adjusted for sprite width
                 spriteX += speed;
                 sprite.style.left = spriteX + 'px';

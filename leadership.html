@@ -101,7 +101,7 @@
         <p><b>Controls:</b> Use WASD or Arrow Keys to move</p>
         <p>Run into the volleyball and see what happens!</p>
         <label>
-            Adjust player speed: <input type="number" value=2 id="player-speed">
+            Adjust player speed: <input type="number" id="player-speed">
             <button id="submit-speed" onclick="saveValue()">Submit</button>
         </label>
         <p><b>Note:</b> This sometimes does not work on non-Chrome browsers, so you can also just click and teleport the ball around.</p>
@@ -135,6 +135,17 @@
     </div>
 
     <script>
+
+        function saveValue() {
+            const value = document.getElementById('player-speed').value;
+            sessionStorage.setItem('playerSpeed', value);
+            console.log('saved player speed');
+        }    
+
+        let playerSpeed= parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
+        button_value = document.getElementById('player-speed')
+        button_value.value = playerSpeed;
+
         document.addEventListener('DOMContentLoaded', function () {
             const settingsMenu = document.getElementById('settings-menu');
             const settingsButton = document.getElementById('settings-button1');
@@ -166,7 +177,6 @@
         const portal = document.querySelector('.portal');
         const vball = document.getElementById('volleyball');
         const tt = document.getElementById('tt');
-        let playerSpeed = parseFloat(sessionStorage.getItem('playerSpeed')) || 2;
         const ballFriction = 0.99;
         const bounceFactor = 1.2;
     

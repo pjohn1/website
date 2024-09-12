@@ -264,17 +264,33 @@
             ball.style.left = ballX + 'px';
             ball.style.top = ballY + 'px';
         }
+
+        function mouseOutBound(mousex,mousey,boundingRect)
+        {
+            if ( mousex < boundingRect.left || mousex > boundingRect.right
+                    || mousey > boundingRect.bottom || mousey < boundingRect.top )
+                    {
+                        return true;
+                    }
+            return false;
+        }
     
         // Move the ball to where the user clicks
         game.addEventListener('click', function (event) {
             const rect = game.getBoundingClientRect();
+            const portalRect = portal.getBoundingClientRect();
             const clickX = event.clientX - rect.left - ball.clientWidth / 2;
             const clickY = event.clientY - rect.top - ball.clientHeight / 2;
-    
+
+            if (!mouseOutBound(event.clientX,event.clientY,portalRect))
+            {
+                window.location.href = portal.dataset.url;
+            }
             // Animate the ball to move towards the clicked position
             ballX = clickX;
             ballY = clickY;
         });
+
     
         function gameLoop() {
             movePlayer();

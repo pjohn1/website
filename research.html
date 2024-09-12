@@ -140,7 +140,7 @@
         button_value = document.getElementById('player-speed')
         button_value.value = playerSpeed;
 
-        let jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 10;
+        let jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 20;
         button_value1 = document.getElementById('jump-height')
         button_value1.value = jumpHeight;
 
@@ -210,7 +210,7 @@
 
         function jump() {
             isJumping = true;
-            jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 10;
+            jumpHeight= parseFloat(sessionStorage.getItem('jumpHeight')) || 20;
             let jumpCount = 0;
             let jumpInterval = setInterval(() => {
                 if (jumpCount < 20) {

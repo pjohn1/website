@@ -111,6 +111,7 @@
             </div>
         </div>
 
+        <p class="text" style="color: lightblue;position: absolute;left:0px;bottom: 57px;transform: translate(0%,0%);z-index: 110;">Use the A/D keys to move left/right!</p>
         <div class="pathway">
             <div id="home" class="portal" data-url="projects.html"></div>
             <div id="sprite"></div>
@@ -143,6 +144,10 @@
         document.addEventListener('keyup', function (event) {
             keysPressed[event.key] = false;
         });
+
+        portal.addEventListener('click', function() {
+            window.location.href = portal.dataset.url;
+        })
         // Function to load videos into the gallery
 
         // Move sprite to the next position, update the pathway's scroll

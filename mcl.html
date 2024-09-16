@@ -116,16 +116,16 @@
                 <p>Using an initial guess, I took random samples around that guessed pose (In this picture, n=300 samples)</p>
             </div>
             <div id="cont4" class="child-text">
-                <p>From there, I used a precomputed probability table and discretized distance locations to calculate the likelihood probability of each pose. Then, I resampled based on that probability.</p>
+                <p>From there, I simulated the scan at each location and calculated the probability that the scan was correct. Then, I resampled based on the probabilities.</p>
             </div>
             <div id="cont5" class="child">
-                <p>After 5 resamples, these were the unique poses:</p>
+                <p>After 5 resamples, there were only two unique poses left:</p>
             </div>
             <div id="cont6" class="child">
                 <p>Finally, the potential poses were wittled down to a final guess:</p>
             </div>
             <div id="cont7" class="child">
-                <p>And this is what the simulated scan looked like at this guess</p>
+                <p>And this is what the simulated scan looked like at this guess:</p>
             </div>
             <div id="cont8" class="child-text">
                 <p>MCL is a fun and complicated task, and I enjoyed this project. In the future, I plan on implementing a SLAM algorithm to track my pose through different LiDAR scans. If you want to see the source code for the MCL task, I am happy to provide it!</a>

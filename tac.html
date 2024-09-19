@@ -113,6 +113,7 @@
         dynamics </p>
     <p id="info6" class="info">You completed the game! Click the portal to return</p>
     <p class="text" style="color: thistle;position:absolute;left:0%;bottom: 0%;">Use the A/D keys to catch the stars!</p>
+    <p id="score" class="text" style="color: thistle;position:absolute;left:0%;bottom: 5%;">Score: 0</p>
     <div id="portal" class="portal" data-url="internships.html">
         <p class="text" style="color: white;transform:translate(100%,0%);">&#8592; Back</p>
     </div>
@@ -121,6 +122,7 @@
     <script>
         let player = document.getElementById('player');
         const infos = document.querySelectorAll('.info');
+        const score = document.getElementById('score');
         const clickableDivs = document.querySelectorAll('.portal');
         let spriteNum = -1;
         let playerPosition = {
@@ -221,7 +223,9 @@
         // Add a sprite element to the right panel when a collision occurs
         function addSpriteToPanel() {
             spriteNum++;
-            console.log(spriteNum);
+            // console.log(spriteNum);
+            score.innerText = "Score: "+(spriteNum+1);
+
             
             if (spriteNum < infos.length) {
                 const rightPanel = document.getElementById('info-list');
